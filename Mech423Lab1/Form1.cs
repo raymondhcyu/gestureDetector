@@ -54,6 +54,8 @@ namespace Mech423Lab1
         accel accData = new accel(); // create new object accData to pass around
         gestureStates gestureState = new gestureStates(); // create new object gesture state to pass around
 
+        // comment
+
         // Create queues for x, y, and z data, and running averages
         ConcurrentQueue<int> xDataQueue = new ConcurrentQueue<int>();
         ConcurrentQueue<int> yDataQueue = new ConcurrentQueue<int>();
