@@ -16,10 +16,43 @@ namespace Mech423Lab1
 {
     public partial class mainForm : Form
     {
+        // Accel class to pass accelerations to detect orientation
+        class accel
+        {
+            public int x;
+            public int y;
+            public int z;
+            public accel()
+            {
+                x = 0;
+                y = 0;
+                z = 0;
+            }
+        }
+
+        class gestureStates
+        {
+            public bool simplePunch; // true if simplePunch, else false
+            public bool highPunch;
+            public bool rightHook;
+            public gestureStates()
+            {
+                simplePunch = false;
+                highPunch = false;
+                rightHook = false;
+            }
+        }
+
         const int chartMax = 100; // max intervals of live reading else appends to end
         const int avgAccelNum = 100; // take avg of last values
+        const int orientHighThresh = 145;
+        const int orientLowThresh = 105;
+        const int gestureThresh = 180;
+
         int bytesInQueue;
         int timeCounter = 0;
+        accel accData = new accel(); // create new object accData to pass around
+        gestureStates gestureState = new gestureStates(); // create new object gesture state to pass around
 
         // Create queues for x, y, and z data, and running averages
         ConcurrentQueue<int> xDataQueue = new ConcurrentQueue<int>();
@@ -140,6 +173,12 @@ namespace Mech423Lab1
                 // Populate real time acceleration
                 RealTimeAccel();
 
+                // Get board orientation
+                GetOrientation();
+
+                // Get gestures
+                GetGesture();
+
                 // Get averages of last 100 elements
                 AvgAccel(averages); // passed by object
                 xLabelAvg.Text = averages[0].ToString();
@@ -170,7 +209,8 @@ namespace Mech423Lab1
                 xVal = dataQueueOutput;
                 if (xVal != 0) // ignore if 0
                 {
-                    xLabel.Text = dataQueueOutput.ToString();
+                    accData.x = dataQueueOutput; // for orientation
+                    xLabel.Text = dataQueueOutput.ToString(); // display
                     xyzChart.Series["X Accel"].Points.AddY(xVal);
                 }
 
@@ -178,6 +218,7 @@ namespace Mech423Lab1
                 yVal = dataQueueOutput;
                 if (yVal != 0)
                 {
+                    accData.y = dataQueueOutput;
                     yLabel.Text = dataQueueOutput.ToString();
                     xyzChart.Series["Y Accel"].Points.AddY(yVal);
                 }
@@ -186,6 +227,7 @@ namespace Mech423Lab1
                 zVal = dataQueueOutput;
                 if (zVal != 0)
                 {
+                    accData.z = dataQueueOutput;
                     zLabel.Text = dataQueueOutput.ToString();
                     xyzChart.Series["Z Accel"].Points.AddY(zVal);
                 }
@@ -253,6 +295,68 @@ namespace Mech423Lab1
             //        MessageBox.Show("Same!");
             //    avg[i] = sum[i] / avgAccelNum;
             //}
+        }
+
+        // Check accelerations and display orientation
+        private void GetOrientation()
+        {
+            if (accData.x > orientHighThresh) // if x axis large then left roll
+                orientationTextbox.Text = "Roll left";
+            else if (accData.x < orientLowThresh)
+                orientationTextbox.Text = "Roll right";
+            else if (accData.y > orientHighThresh)
+                orientationTextbox.Text = "Pitch up";
+            else if (accData.y < orientLowThresh)
+                orientationTextbox.Text = "Pitch down";
+            else if (accData.z > orientHighThresh)
+                orientationTextbox.Text = "Level";
+            else if (accData.z < orientLowThresh)
+                orientationTextbox.Text = "Inverted";
+            else
+                orientationTextbox.Text = "";
+        }
+
+        // Check accelerations and display gestures
+        private void GetGesture()
+        {
+            if (accData.x > gestureThresh)
+            {
+
+                gestureTextbox.Text = "Simple punch";
+            }
+            else if (accData.y > gestureThresh)
+            {
+                gestureTextbox.Text = "+Y";
+            }
+            else if (accData.z > gestureThresh)
+            {
+                gestureTextbox.Text = "+Z";
+            }
+            else
+            {
+                gestureTextbox.Text = "";
+            }
+
+        }
+
+        private void DisplayGesture(string state)
+        {
+            switch (state)
+            {
+                // X
+                case "X": // state.simplePunch state.highPunch state.rightHook
+                    gestureTextbox.Text = "Simple punch";
+                    break;
+                case "Y":
+                    gestureTextbox.Text = "Y";
+                    break;
+                case "Z":
+                    gestureTextbox.Text = "";
+                    break;
+                default:
+                    gestureTextbox.Text = "";
+                    break;
+            }
         }
     }
 }

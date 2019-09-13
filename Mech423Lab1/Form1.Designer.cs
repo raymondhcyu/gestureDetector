@@ -60,10 +60,12 @@
             this.label10 = new System.Windows.Forms.Label();
             this.bufferSizeTextbox = new System.Windows.Forms.TextBox();
             this.uptimeTextbox = new System.Windows.Forms.TextBox();
-            this.gestureTextbox = new System.Windows.Forms.Label();
+            this.gestureLabel = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.gestureTextbox = new System.Windows.Forms.TextBox();
             this.accelSequenceTextbox = new System.Windows.Forms.TextBox();
+            this.orientationLabel = new System.Windows.Forms.Label();
+            this.orientationTextbox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.xyzChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -305,14 +307,14 @@
             this.uptimeTextbox.Size = new System.Drawing.Size(100, 22);
             this.uptimeTextbox.TabIndex = 23;
             // 
-            // gestureTextbox
+            // gestureLabel
             // 
-            this.gestureTextbox.AutoSize = true;
-            this.gestureTextbox.Location = new System.Drawing.Point(719, 355);
-            this.gestureTextbox.Name = "gestureTextbox";
-            this.gestureTextbox.Size = new System.Drawing.Size(63, 17);
-            this.gestureTextbox.TabIndex = 30;
-            this.gestureTextbox.Text = "Gesture:";
+            this.gestureLabel.AutoSize = true;
+            this.gestureLabel.Location = new System.Drawing.Point(719, 355);
+            this.gestureLabel.Name = "gestureLabel";
+            this.gestureLabel.Size = new System.Drawing.Size(63, 17);
+            this.gestureLabel.TabIndex = 30;
+            this.gestureLabel.Text = "Gesture:";
             // 
             // label12
             // 
@@ -323,13 +325,13 @@
             this.label12.TabIndex = 29;
             this.label12.Text = "Accel Sequence:";
             // 
-            // textBox3
+            // gestureTextbox
             // 
-            this.textBox3.Location = new System.Drawing.Point(788, 355);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(162, 22);
-            this.textBox3.TabIndex = 28;
+            this.gestureTextbox.Location = new System.Drawing.Point(788, 355);
+            this.gestureTextbox.Name = "gestureTextbox";
+            this.gestureTextbox.ReadOnly = true;
+            this.gestureTextbox.Size = new System.Drawing.Size(162, 22);
+            this.gestureTextbox.TabIndex = 28;
             // 
             // accelSequenceTextbox
             // 
@@ -339,14 +341,33 @@
             this.accelSequenceTextbox.Size = new System.Drawing.Size(162, 22);
             this.accelSequenceTextbox.TabIndex = 27;
             // 
+            // orientationLabel
+            // 
+            this.orientationLabel.AutoSize = true;
+            this.orientationLabel.Location = new System.Drawing.Point(221, 325);
+            this.orientationLabel.Name = "orientationLabel";
+            this.orientationLabel.Size = new System.Drawing.Size(82, 17);
+            this.orientationLabel.TabIndex = 32;
+            this.orientationLabel.Text = "Orientation:";
+            // 
+            // orientationTextbox
+            // 
+            this.orientationTextbox.Location = new System.Drawing.Point(317, 325);
+            this.orientationTextbox.Name = "orientationTextbox";
+            this.orientationTextbox.ReadOnly = true;
+            this.orientationTextbox.Size = new System.Drawing.Size(100, 22);
+            this.orientationTextbox.TabIndex = 31;
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(962, 433);
-            this.Controls.Add(this.gestureTextbox);
+            this.Controls.Add(this.orientationLabel);
+            this.Controls.Add(this.orientationTextbox);
+            this.Controls.Add(this.gestureLabel);
             this.Controls.Add(this.label12);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.gestureTextbox);
             this.Controls.Add(this.accelSequenceTextbox);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label10);
@@ -410,10 +431,12 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox bufferSizeTextbox;
         private System.Windows.Forms.TextBox uptimeTextbox;
-        private System.Windows.Forms.Label gestureTextbox;
+        private System.Windows.Forms.Label gestureLabel;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox gestureTextbox;
         private System.Windows.Forms.TextBox accelSequenceTextbox;
+        private System.Windows.Forms.Label orientationLabel;
+        private System.Windows.Forms.TextBox orientationTextbox;
     }
 }
 
