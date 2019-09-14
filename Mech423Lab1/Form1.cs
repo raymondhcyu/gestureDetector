@@ -49,11 +49,19 @@ namespace Mech423Lab1
             }
         }
 
+        enum gestureStateSwitch
+        {
+            NOTHING, // default
+            X, // + X
+            Y, // + Y
+            Z // + Z
+        }
+
         const int chartMax = 100; // max intervals of live reading else appends to end
         const int avgAccelNum = 100; // take avg of last values
         const int orientHighThresh = 145;
         const int orientLowThresh = 105;
-        const int gestureThresh = 180;
+        const int gestureThresh = 200;
 
         int bytesInQueue;
         int timeCounter = 0;
@@ -188,8 +196,7 @@ namespace Mech423Lab1
                 GetOrientation();
 
                 // Get gestures
-                //GetGesture();
-                //GetGestureSwitch();
+                GetGesture();
 
                 // Get averages of last 100 elements
                 AvgAccel(averages); // passed by object
@@ -328,37 +335,71 @@ namespace Mech423Lab1
                 orientationTextbox.Text = "";
         }
 
-        //private void GetGestureSwitch(gestureStates gesture)
-        //{
-        //    switch (gesture)
-        //    {
-        //        case gesture.simplePunch:
-        //            break;
-        //    }
-        //}
+        private void GetGestureSwitch(gestureStateSwitch gesture)
+        {
+            gestureTimer.Reset();
+            switch (gesture)
+            {
+                case gestureStateSwitch.NOTHING: // default case
+                    if (accData.x > gestureThresh)
+                    {
+                        gesture = gestureStateSwitch.X;
+                        gestureTimer.Start();
+                        while (gestureTimer.ElapsedMilliseconds < 2000)
+                        {
+                            if (accData.y > gestureThresh)
+                            {
+                                gestureTextbox.Text = "Got to here!";
+                                uptimeSecondsLabel.Text = gestureTimer.ElapsedMilliseconds.ToString();
+                            }
+                            else
+                            {
+                                gestureTextbox.Text = "Else";
+                            }
+
+                        }
+                    }
+                    break;
+                case gestureStateSwitch.X:
+                    break;
+                case gestureStateSwitch.Y:
+                    gestureTimer.Reset();
+                    break;
+                case gestureStateSwitch.Z:
+                    gestureTimer.Reset();
+                    break;
+            }
+        }
 
         // Check accelerations and display gestures
         private void GetGesture()
         {
-            gestureState.resetAll();
-            gestureTimer.Reset();
-
-            if (accData.x > gestureThresh)
+            if (!gestureState.simplePunch)
             {
-                gestureTimer.Start();
-
-                if (gestureTimer.ElapsedMilliseconds < 1000)
+                gestureTimer.Reset();
+                gestureTextbox.Text = "";
+                accelSequenceTextbox.Text = "";
+                if (accData.x > gestureThresh)
                 {
+                    if (!gestureTimer.IsRunning)
+                    {
+                        gestureTimer.Start();
+                        gestureState.simplePunch = true;
+                    }
+                }
+            }
+            else if (gestureState.simplePunch)
+            {
+                gestureTextbox.Text = "Simple punch";
+                accelSequenceTextbox.Text = "+X";
 
+                if (gestureTimer.ElapsedMilliseconds > 1000)
+                {
+                    gestureState.simplePunch = false;
                 }
 
-                accelSequenceTextbox.Text = "+X";
-                gestureTextbox.Text = "Simple punch";
-                
-                gestureState.simplePunch = true;
             }
-            else
-                gestureState.resetAll();
+
         }
 
         //private void DisplayGesture(string state)
