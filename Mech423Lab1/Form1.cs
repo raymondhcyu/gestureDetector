@@ -41,6 +41,12 @@ namespace Mech423Lab1
                 highPunch = false;
                 rightHook = false;
             }
+            public void resetAll()
+            {
+                simplePunch = false;
+                highPunch = false;
+                rightHook = false;
+            }
         }
 
         const int chartMax = 100; // max intervals of live reading else appends to end
@@ -51,10 +57,11 @@ namespace Mech423Lab1
 
         int bytesInQueue;
         int timeCounter = 0;
+
         accel accData = new accel(); // create new object accData to pass around
         gestureStates gestureState = new gestureStates(); // create new object gesture state to pass around
-
-        // comment
+        Stopwatch uptimeTimer = new Stopwatch(); // timer for uptime
+        Stopwatch gestureTimer = new Stopwatch(); // timer for gestures
 
         // Create queues for x, y, and z data, and running averages
         ConcurrentQueue<int> xDataQueue = new ConcurrentQueue<int>();
@@ -166,6 +173,8 @@ namespace Mech423Lab1
 
         private void TheTimer_Tick(object sender, EventArgs e)
         {
+
+
             int[] averages = new int[] { 0, 0, 0 };
             if (serialCom.IsOpen)
             {
@@ -179,7 +188,8 @@ namespace Mech423Lab1
                 GetOrientation();
 
                 // Get gestures
-                GetGesture();
+                //GetGesture();
+                //GetGestureSwitch();
 
                 // Get averages of last 100 elements
                 AvgAccel(averages); // passed by object
@@ -192,7 +202,7 @@ namespace Mech423Lab1
                 int seconds = ((timeCounter * theTimer.Interval / 1000) % 60);
                 string uptime = minutes.ToString() + " min " + seconds.ToString() + " sec";
 
-                uptimeTextbox.Text = uptime;
+                //uptimeTextbox.Text = uptime;
                 timeCounter++;
             }
         }
@@ -318,47 +328,57 @@ namespace Mech423Lab1
                 orientationTextbox.Text = "";
         }
 
+        //private void GetGestureSwitch(gestureStates gesture)
+        //{
+        //    switch (gesture)
+        //    {
+        //        case gesture.simplePunch:
+        //            break;
+        //    }
+        //}
+
         // Check accelerations and display gestures
         private void GetGesture()
         {
+            gestureState.resetAll();
+            gestureTimer.Reset();
+
             if (accData.x > gestureThresh)
             {
+                gestureTimer.Start();
 
+                if (gestureTimer.ElapsedMilliseconds < 1000)
+                {
+
+                }
+
+                accelSequenceTextbox.Text = "+X";
                 gestureTextbox.Text = "Simple punch";
-            }
-            else if (accData.y > gestureThresh)
-            {
-                gestureTextbox.Text = "+Y";
-            }
-            else if (accData.z > gestureThresh)
-            {
-                gestureTextbox.Text = "+Z";
+                
+                gestureState.simplePunch = true;
             }
             else
-            {
-                gestureTextbox.Text = "";
-            }
-
+                gestureState.resetAll();
         }
 
-        private void DisplayGesture(string state)
-        {
-            switch (state)
-            {
-                // X
-                case "X": // state.simplePunch state.highPunch state.rightHook
-                    gestureTextbox.Text = "Simple punch";
-                    break;
-                case "Y":
-                    gestureTextbox.Text = "Y";
-                    break;
-                case "Z":
-                    gestureTextbox.Text = "";
-                    break;
-                default:
-                    gestureTextbox.Text = "";
-                    break;
-            }
-        }
+        //private void DisplayGesture(string state)
+        //{
+        //    switch (state)
+        //    {
+        //        // X
+        //        case "X": // state.simplePunch state.highPunch state.rightHook
+        //            gestureTextbox.Text = "Simple punch";
+        //            break;
+        //        case "Y":
+        //            gestureTextbox.Text = "Y";
+        //            break;
+        //        case "Z":
+        //            gestureTextbox.Text = "";
+        //            break;
+        //        default:
+        //            gestureTextbox.Text = "";
+        //            break;
+        //    }
+        //}
     }
 }
