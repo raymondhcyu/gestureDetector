@@ -61,7 +61,7 @@ namespace Mech423Lab1
         const int avgAccelNum = 100; // take avg of last values
         const int orientHighThresh = 145;
         const int orientLowThresh = 105;
-        const int gestureThresh = 200;
+        const int gestureThresh = 180;
 
         int bytesInQueue;
         int timeCounter = 0;
@@ -377,27 +377,47 @@ namespace Mech423Lab1
             if (!gestureState.simplePunch)
             {
                 gestureTimer.Reset();
-                gestureTextbox.Text = "";
+                gestureTextbox.Text = ""; //
                 accelSequenceTextbox.Text = "";
                 if (accData.x > gestureThresh)
                 {
                     if (!gestureTimer.IsRunning)
                     {
-                        gestureTimer.Start();
+                        gestureTimer.Start(); // start timer
                         gestureState.simplePunch = true;
                     }
                 }
             }
             else if (gestureState.simplePunch)
             {
-                gestureTextbox.Text = "Simple punch";
-                accelSequenceTextbox.Text = "+X";
 
-                if (gestureTimer.ElapsedMilliseconds > 1000)
+                if ((accData.y > gestureThresh) && (gestureTimer.ElapsedMilliseconds < 2000))
+                {
+                    gestureTimer.Restart(); // restart timer since new move detected
+                    gestureState.rightHook = true;
+                    /*PAN PAN PAN: NEED TO ADD A STATE FOR EACH TRANSITION REGION,
+                     MAYBE LIKE 1, 0, -1 ELSE SIMPLEPUNCH RE-ENTERING THIS LOOP*/
+                }
+                if (gestureTimer.ElapsedMilliseconds < 1000)
+                {
+                    gestureTextbox.Text = "Simple punch";
+                    accelSequenceTextbox.Text = "+X";
+                }
+                if ((gestureTimer.ElapsedMilliseconds > 1000) && (gestureTimer.ElapsedMilliseconds < 2000))
+                {
+                    gestureTextbox.Text = "";
+                    accelSequenceTextbox.Text = "";
+                }
+                if (gestureTimer.ElapsedMilliseconds > 2000)
                 {
                     gestureState.simplePunch = false;
                 }
-
+            }
+            else if (gestureState.rightHook)
+            {
+                MessageBox.Show("Here!");
+                gestureTextbox.Text = "On the way to right hook";
+                accelSequenceTextbox.Text = "+Y";
             }
 
         }
