@@ -41,6 +41,8 @@ namespace Mech423Lab1
         int bytesInQueue;
         string gestureState = ""; // global variable to set gestures
         int gestureCount = 0; // number of gestures detected
+        int[] averages = new int[] { 0, 0, 0 };
+
 
         accel accData = new accel(); // create new object accData to pass around
         Stopwatch uptimeTimer = new Stopwatch(); // timer for uptime
@@ -91,6 +93,9 @@ namespace Mech423Lab1
                 serialCom.Open();
                 theTimer.Enabled = true; // enable timer only on powerup
                 serialConnectButton.Text = "Disconnect";
+
+                // Start uptime stopwatch
+                uptimeTimer.Restart();
             }
 
         }
@@ -158,8 +163,6 @@ namespace Mech423Lab1
         private void TheTimer_Tick(object sender, EventArgs e)
         {
 
-
-            int[] averages = new int[] { 0, 0, 0 };
             if (serialCom.IsOpen)
             {
                 // Show bytes in queue
@@ -174,6 +177,13 @@ namespace Mech423Lab1
                 // Get gestures
                 GetGesture();
 
+                // Display uptime
+                int time = System.Convert.ToInt32(uptimeTimer.Elapsed.TotalSeconds);
+                int seconds = time % 60;
+                int minutes = time / 60;
+                uptimeTextbox.Text = string.Format("{0:00}:{1:00}", minutes, seconds).ToString();
+
+                // Gesture check logic
                 if (gestureTimer.Elapsed.TotalMilliseconds > gestureDisplayLimit)
                 {
                     if ((gestureState == "") && (gestureCount != 0))
@@ -190,7 +200,7 @@ namespace Mech423Lab1
 
                     gestureState = ""; // reset gesture
                     DisplayGesture();
-                    DisplayCombo();
+
 
                     if (gestureCount != 0) // restart timer if gesture detected
                     {
@@ -202,6 +212,7 @@ namespace Mech423Lab1
                         gestureTimer.Reset();
                     }
                 }
+                DisplayCombo();
 
                 // Get averages of last 100 elements
                 AvgAccel(averages); // passed by object
@@ -304,14 +315,6 @@ namespace Mech423Lab1
             {
                 avg[i] = sum[i] / avgAccelNum;
             }
-
-            // Why doesn't this work??
-            //foreach (int i in avg)
-            //{
-            //    if (avg.Length == sum.Length)
-            //        MessageBox.Show("Same!");
-            //    avg[i] = sum[i] / avgAccelNum;
-            //}
         }
 
         // Check accelerations and display orientation
@@ -380,17 +383,28 @@ namespace Mech423Lab1
             gestureCount = gestureQueue.Count(); // get num gestures in queue    
         }
 
-        // Show combination of gesture
+        // Show combination of gesture and show gesture name
         private void DisplayCombo()
         {
             string[] gestures = gestureQueue.ToArray();
             string output = string.Join(" ", gestures);
             accelSequenceTextbox.Text = output;
 
-            if (output == "+Z +Z +Z")
+            if (output == "+X")
             {
-                gestureTextbox.Text = "FINALLLLY";
-                gestureTimer.Restart();
+                gestureTextbox.Text = "Simple punch";
+            }
+            else if (output == "+Z +X")
+            {
+                gestureTextbox.Text = "High punch";
+            }
+            else if (output == "+X +Y +Z")
+            {
+                gestureTextbox.Text = "Right hook";
+            }
+            else
+            {
+                gestureTextbox.Text = "";
             }
         }
     }
