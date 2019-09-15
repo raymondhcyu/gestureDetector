@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.serialConnectButton = new System.Windows.Forms.Button();
             this.serialComboBox = new System.Windows.Forms.ComboBox();
             this.theTimer = new System.Windows.Forms.Timer(this.components);
@@ -67,6 +67,8 @@
             this.orientationLabel = new System.Windows.Forms.Label();
             this.orientationTextbox = new System.Windows.Forms.TextBox();
             this.uptimeSecondsLabel = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.currentAccelTextbox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.xyzChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -101,34 +103,34 @@
             // 
             this.xyzChart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea2.Name = "ChartArea1";
-            this.xyzChart.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.xyzChart.Legends.Add(legend2);
+            chartArea1.Name = "ChartArea1";
+            this.xyzChart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.xyzChart.Legends.Add(legend1);
             this.xyzChart.Location = new System.Drawing.Point(224, 12);
             this.xyzChart.Name = "xyzChart";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series4.Legend = "Legend1";
-            series4.Name = "X Accel";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series5.Legend = "Legend1";
-            series5.Name = "Y Accel";
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series6.Legend = "Legend1";
-            series6.Name = "Z Accel";
-            this.xyzChart.Series.Add(series4);
-            this.xyzChart.Series.Add(series5);
-            this.xyzChart.Series.Add(series6);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.Legend = "Legend1";
+            series1.Name = "X Accel";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.Legend = "Legend1";
+            series2.Name = "Y Accel";
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series3.Legend = "Legend1";
+            series3.Name = "Z Accel";
+            this.xyzChart.Series.Add(series1);
+            this.xyzChart.Series.Add(series2);
+            this.xyzChart.Series.Add(series3);
             this.xyzChart.Size = new System.Drawing.Size(726, 300);
             this.xyzChart.TabIndex = 3;
             this.xyzChart.Text = "chart1";
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(867, 398);
+            this.exitButton.Location = new System.Drawing.Point(867, 453);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(83, 23);
             this.exitButton.TabIndex = 4;
@@ -258,7 +260,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(772, 398);
+            this.button1.Location = new System.Drawing.Point(772, 453);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 21;
@@ -267,7 +269,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(674, 398);
+            this.button2.Location = new System.Drawing.Point(674, 453);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 22;
@@ -311,7 +313,7 @@
             // gestureLabel
             // 
             this.gestureLabel.AutoSize = true;
-            this.gestureLabel.Location = new System.Drawing.Point(719, 355);
+            this.gestureLabel.Location = new System.Drawing.Point(719, 383);
             this.gestureLabel.Name = "gestureLabel";
             this.gestureLabel.Size = new System.Drawing.Size(63, 17);
             this.gestureLabel.TabIndex = 30;
@@ -320,7 +322,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(668, 325);
+            this.label12.Location = new System.Drawing.Point(668, 353);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(114, 17);
             this.label12.TabIndex = 29;
@@ -328,7 +330,7 @@
             // 
             // gestureTextbox
             // 
-            this.gestureTextbox.Location = new System.Drawing.Point(788, 355);
+            this.gestureTextbox.Location = new System.Drawing.Point(788, 383);
             this.gestureTextbox.Name = "gestureTextbox";
             this.gestureTextbox.ReadOnly = true;
             this.gestureTextbox.Size = new System.Drawing.Size(162, 22);
@@ -336,7 +338,7 @@
             // 
             // accelSequenceTextbox
             // 
-            this.accelSequenceTextbox.Location = new System.Drawing.Point(788, 325);
+            this.accelSequenceTextbox.Location = new System.Drawing.Point(788, 353);
             this.accelSequenceTextbox.Name = "accelSequenceTextbox";
             this.accelSequenceTextbox.ReadOnly = true;
             this.accelSequenceTextbox.Size = new System.Drawing.Size(162, 22);
@@ -362,17 +364,36 @@
             // uptimeSecondsLabel
             // 
             this.uptimeSecondsLabel.AutoSize = true;
-            this.uptimeSecondsLabel.Location = new System.Drawing.Point(350, 383);
+            this.uptimeSecondsLabel.Location = new System.Drawing.Point(221, 427);
             this.uptimeSecondsLabel.Name = "uptimeSecondsLabel";
             this.uptimeSecondsLabel.Size = new System.Drawing.Size(112, 17);
             this.uptimeSecondsLabel.TabIndex = 33;
             this.uptimeSecondsLabel.Text = "Uptime (second)";
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(685, 327);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(97, 17);
+            this.label11.TabIndex = 35;
+            this.label11.Text = "Current Accel:";
+            // 
+            // currentAccelTextbox
+            // 
+            this.currentAccelTextbox.Location = new System.Drawing.Point(788, 325);
+            this.currentAccelTextbox.Name = "currentAccelTextbox";
+            this.currentAccelTextbox.ReadOnly = true;
+            this.currentAccelTextbox.Size = new System.Drawing.Size(162, 22);
+            this.currentAccelTextbox.TabIndex = 34;
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(962, 433);
+            this.ClientSize = new System.Drawing.Size(962, 488);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.currentAccelTextbox);
             this.Controls.Add(this.uptimeSecondsLabel);
             this.Controls.Add(this.orientationLabel);
             this.Controls.Add(this.orientationTextbox);
@@ -449,6 +470,8 @@
         private System.Windows.Forms.Label orientationLabel;
         private System.Windows.Forms.TextBox orientationTextbox;
         private System.Windows.Forms.Label uptimeSecondsLabel;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox currentAccelTextbox;
     }
 }
 

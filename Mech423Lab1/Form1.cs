@@ -30,54 +30,30 @@ namespace Mech423Lab1
             }
         }
 
-        class gestureStates
-        {
-            public bool simplePunch; // true if simplePunch, else false
-            public bool highPunch;
-            public bool rightHook;
-            public gestureStates()
-            {
-                simplePunch = false;
-                highPunch = false;
-                rightHook = false;
-            }
-            public void resetAll()
-            {
-                simplePunch = false;
-                highPunch = false;
-                rightHook = false;
-            }
-        }
-
-        enum gestureStateSwitch
-        {
-            NOTHING, // default
-            X, // + X
-            Y, // + Y
-            Z // + Z
-        }
-
         const int chartMax = 100; // max intervals of live reading else appends to end
         const int avgAccelNum = 100; // take avg of last values
         const int orientHighThresh = 145;
         const int orientLowThresh = 105;
         const int gestureThresh = 180;
+        const int gestureDisplayLimit = 1000; // 1000ms to display gesture
+        const int gestureCheckLimit = 2000; // 2000ms to check for new gesture
 
         int bytesInQueue;
-        int timeCounter = 0;
+        string gestureState = ""; // global variable to set gestures
+        int gestureCount = 0; // number of gestures detected
 
         accel accData = new accel(); // create new object accData to pass around
-        gestureStates gestureState = new gestureStates(); // create new object gesture state to pass around
         Stopwatch uptimeTimer = new Stopwatch(); // timer for uptime
         Stopwatch gestureTimer = new Stopwatch(); // timer for gestures
 
-        // Create queues for x, y, and z data, and running averages
+        // Create queues for x, y, and z data; running averages; list of gestures
         ConcurrentQueue<int> xDataQueue = new ConcurrentQueue<int>();
         ConcurrentQueue<int> yDataQueue = new ConcurrentQueue<int>();
         ConcurrentQueue<int> zDataQueue = new ConcurrentQueue<int>();
         ConcurrentQueue<int> xDataQueueAvg = new ConcurrentQueue<int>();
         ConcurrentQueue<int> yDataQueueAvg = new ConcurrentQueue<int>();
         ConcurrentQueue<int> zDataQueueAvg = new ConcurrentQueue<int>();
+        ConcurrentQueue<string> gestureQueue = new ConcurrentQueue<string>();
 
         public mainForm()
         { 
@@ -198,19 +174,41 @@ namespace Mech423Lab1
                 // Get gestures
                 GetGesture();
 
+                if (gestureTimer.Elapsed.TotalMilliseconds > gestureDisplayLimit)
+                {
+                    if ((gestureState == "") && (gestureCount != 0))
+                    {
+                        gestureCount = 0; // reset gesture count
+
+                        // Dequeue gesture queue since reset
+                        while (!gestureQueue.IsEmpty)
+                        {
+                            string temp = "";
+                            gestureQueue.TryDequeue(out temp);
+                        }
+                    }
+
+                    gestureState = ""; // reset gesture
+                    DisplayGesture();
+                    DisplayCombo();
+
+                    if (gestureCount != 0) // restart timer if gesture detected
+                    {
+                        gestureTimer.Restart();
+                    }
+                    else
+                    {
+                        gestureTimer.Stop();
+                        gestureTimer.Reset();
+                    }
+                }
+
                 // Get averages of last 100 elements
                 AvgAccel(averages); // passed by object
                 xLabelAvg.Text = averages[0].ToString();
                 yLabelAvg.Text = averages[1].ToString();
                 zLabelAvg.Text = averages[2].ToString();
 
-                // Display uptime
-                int minutes = ((timeCounter * theTimer.Interval / 1000) / 60);
-                int seconds = ((timeCounter * theTimer.Interval / 1000) % 60);
-                string uptime = minutes.ToString() + " min " + seconds.ToString() + " sec";
-
-                //uptimeTextbox.Text = uptime;
-                timeCounter++;
             }
         }
 
@@ -335,111 +333,65 @@ namespace Mech423Lab1
                 orientationTextbox.Text = "";
         }
 
-        private void GetGestureSwitch(gestureStateSwitch gesture)
-        {
-            gestureTimer.Reset();
-            switch (gesture)
-            {
-                case gestureStateSwitch.NOTHING: // default case
-                    if (accData.x > gestureThresh)
-                    {
-                        gesture = gestureStateSwitch.X;
-                        gestureTimer.Start();
-                        while (gestureTimer.ElapsedMilliseconds < 2000)
-                        {
-                            if (accData.y > gestureThresh)
-                            {
-                                gestureTextbox.Text = "Got to here!";
-                                uptimeSecondsLabel.Text = gestureTimer.ElapsedMilliseconds.ToString();
-                            }
-                            else
-                            {
-                                gestureTextbox.Text = "Else";
-                            }
-
-                        }
-                    }
-                    break;
-                case gestureStateSwitch.X:
-                    break;
-                case gestureStateSwitch.Y:
-                    gestureTimer.Reset();
-                    break;
-                case gestureStateSwitch.Z:
-                    gestureTimer.Reset();
-                    break;
-            }
-        }
-
         // Check accelerations and display gestures
         private void GetGesture()
         {
-            if (!gestureState.simplePunch)
+            if (gestureState == "")
             {
-                gestureTimer.Reset();
-                gestureTextbox.Text = ""; //
-                accelSequenceTextbox.Text = "";
+                if (gestureCount == 0) // if no gestures start timer
+                {
+                    gestureTimer.Restart(); // restart if it stopped before
+                }
                 if (accData.x > gestureThresh)
                 {
-                    if (!gestureTimer.IsRunning)
-                    {
-                        gestureTimer.Start(); // start timer
-                        gestureState.simplePunch = true;
-                    }
+                    gestureState = "+X";
                 }
-            }
-            else if (gestureState.simplePunch)
-            {
+                else if (accData.y > gestureThresh)
+                {
+                    gestureState = "+Y";
+                }
+                else if (accData.z > gestureThresh)
+                {
+                    gestureState = "+Z";
+                }
+                else
+                {
+                    gestureState = "";
+                }
 
-                if ((accData.y > gestureThresh) && (gestureTimer.ElapsedMilliseconds < 2000))
-                {
-                    gestureTimer.Restart(); // restart timer since new move detected
-                    gestureState.rightHook = true;
-                    /*PAN PAN PAN: NEED TO ADD A STATE FOR EACH TRANSITION REGION,
-                     MAYBE LIKE 1, 0, -1 ELSE SIMPLEPUNCH RE-ENTERING THIS LOOP*/
-                }
-                if (gestureTimer.ElapsedMilliseconds < 1000)
-                {
-                    gestureTextbox.Text = "Simple punch";
-                    accelSequenceTextbox.Text = "+X";
-                }
-                if ((gestureTimer.ElapsedMilliseconds > 1000) && (gestureTimer.ElapsedMilliseconds < 2000))
-                {
-                    gestureTextbox.Text = "";
-                    accelSequenceTextbox.Text = "";
-                }
-                if (gestureTimer.ElapsedMilliseconds > 2000)
-                {
-                    gestureState.simplePunch = false;
-                }
-            }
-            else if (gestureState.rightHook)
-            {
-                MessageBox.Show("Here!");
-                gestureTextbox.Text = "On the way to right hook";
-                accelSequenceTextbox.Text = "+Y";
-            }
+                DisplayGesture(); // show gesture 
 
+                if (gestureState != "")
+                {
+                    StoreGesture();
+                }
+            }
         }
 
-        //private void DisplayGesture(string state)
-        //{
-        //    switch (state)
-        //    {
-        //        // X
-        //        case "X": // state.simplePunch state.highPunch state.rightHook
-        //            gestureTextbox.Text = "Simple punch";
-        //            break;
-        //        case "Y":
-        //            gestureTextbox.Text = "Y";
-        //            break;
-        //        case "Z":
-        //            gestureTextbox.Text = "";
-        //            break;
-        //        default:
-        //            gestureTextbox.Text = "";
-        //            break;
-        //    }
-        //}
+        // Display gesture
+        private void DisplayGesture()
+        {
+            currentAccelTextbox.Text = gestureState;
+        }
+
+        private void StoreGesture()
+        {
+            gestureQueue.Enqueue(gestureState);
+            gestureCount = gestureQueue.Count(); // get num gestures in queue    
+        }
+
+        // Show combination of gesture
+        private void DisplayCombo()
+        {
+            string[] gestures = gestureQueue.ToArray();
+            string output = string.Join(" ", gestures);
+            accelSequenceTextbox.Text = output;
+
+            if (output == "+Z +Z +Z")
+            {
+                gestureTextbox.Text = "FINALLLLY";
+                gestureTimer.Restart();
+            }
+        }
     }
 }
