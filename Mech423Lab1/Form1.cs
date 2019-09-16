@@ -32,9 +32,9 @@ namespace Mech423Lab1
 
         class ypr
         {
-            public int yaw;
-            public int pitch;
-            public int roll;
+            public double yaw;
+            public double pitch;
+            public double roll;
 
             public ypr() // default constructor
             {
@@ -437,14 +437,27 @@ namespace Mech423Lab1
         // Calculate and display yaw pitch roll
         private void GetYPR()
         {
-            double roll = (Math.Atan2(-1 * accData.y, accData.z) * 180) / Math.PI;
-            double pitch = (Math.Atan2(accData.x, Math.Sqrt(accData.y * accData.y + accData.z * accData.z)) * 180) / Math.PI;
+            //double roll = (Math.Atan2(-1 * accData.y, accData.z) * 180) / Math.PI;
+            //double pitch = (Math.Atan2(accData.x, Math.Sqrt(accData.y * accData.y + accData.z * accData.z)) * 180) / Math.PI;
+            //YPR.roll = System.Convert.ToInt32(roll);
+            //YPR.pitch = System.Convert.ToInt32(pitch);
 
-            YPR.roll = System.Convert.ToInt32(roll);
-            YPR.pitch = System.Convert.ToInt32(pitch);
+            // YPR.roll = (accData.x - 125); // roll using x accel; 125 is zero, 3.6 multiplication factor
+            // YPR.pitch = (accData.y - 125); // pitch using y accel
 
-            rollTextbox.Text = YPR.roll.ToString();
-            pitchTextbox.Text = YPR.pitch.ToString();
+            YPR.pitch = Map(System.Convert.ToDouble(accData.y), 0, 255, -90, 90);
+            YPR.pitch = Map(YPR.pitch, -20, 16, -90, 90);
+
+            YPR.roll = Map(System.Convert.ToDouble(accData.x), 0, 255, -90, 90);
+            YPR.roll = Map(YPR.roll, -19, 17, -90, 90);
+
+            rollTextbox.Text = string.Format("{0:0.0}", YPR.roll);
+            pitchTextbox.Text = string.Format("{0:0.0}", YPR.pitch);
+        }
+
+        public double Map(double value, double fromSource, double toSource, double fromTarget, double toTarget)
+        {
+            return (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
         }
 
         private void DatalogCheckbox_CheckedChanged(object sender, EventArgs e)
