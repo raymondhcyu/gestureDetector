@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.serialConnectButton = new System.Windows.Forms.Button();
             this.serialComboBox = new System.Windows.Forms.ComboBox();
             this.theTimer = new System.Windows.Forms.Timer(this.components);
@@ -82,7 +82,21 @@
             this.orientPicBoxYaw = new System.Windows.Forms.PictureBox();
             this.label13 = new System.Windows.Forms.Label();
             this.bytesToReadTextbox = new System.Windows.Forms.TextBox();
-            this.xstddevtest = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.gravZTextbox = new System.Windows.Forms.TextBox();
+            this.gravYTextbox = new System.Windows.Forms.TextBox();
+            this.gravXTextbox = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.gravTotalTextbox = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.zBufferTextbox = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.yBufferTextbox = new System.Windows.Forms.TextBox();
+            this.xBufferTextbox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.xyzChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.orientPicBoxPitch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.orientPicBoxRoll)).BeginInit();
@@ -120,34 +134,35 @@
             // 
             this.xyzChart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea1.Name = "ChartArea1";
-            this.xyzChart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.xyzChart.Legends.Add(legend1);
+            chartArea3.Name = "ChartArea1";
+            this.xyzChart.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.xyzChart.Legends.Add(legend3);
             this.xyzChart.Location = new System.Drawing.Point(224, 12);
             this.xyzChart.Name = "xyzChart";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series1.Legend = "Legend1";
-            series1.Name = "X Accel";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series2.Legend = "Legend1";
-            series2.Name = "Y Accel";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series3.Legend = "Legend1";
-            series3.Name = "Z Accel";
-            this.xyzChart.Series.Add(series1);
-            this.xyzChart.Series.Add(series2);
-            this.xyzChart.Series.Add(series3);
-            this.xyzChart.Size = new System.Drawing.Size(726, 300);
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series7.Legend = "Legend1";
+            series7.Name = "X Accel";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series8.Legend = "Legend1";
+            series8.Name = "Y Accel";
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series9.Legend = "Legend1";
+            series9.Name = "Z Accel";
+            this.xyzChart.Series.Add(series7);
+            this.xyzChart.Series.Add(series8);
+            this.xyzChart.Series.Add(series9);
+            this.xyzChart.Size = new System.Drawing.Size(896, 300);
             this.xyzChart.TabIndex = 3;
             this.xyzChart.Text = "chart1";
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(870, 603);
+            this.exitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.exitButton.Location = new System.Drawing.Point(1037, 608);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(83, 23);
             this.exitButton.TabIndex = 4;
@@ -158,7 +173,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 56);
+            this.label1.Location = new System.Drawing.Point(15, 50);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 17);
             this.label1.TabIndex = 5;
@@ -167,7 +182,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 147);
+            this.label3.Location = new System.Drawing.Point(17, 131);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(59, 17);
             this.label3.TabIndex = 13;
@@ -176,7 +191,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 117);
+            this.label4.Location = new System.Drawing.Point(17, 101);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(59, 17);
             this.label4.TabIndex = 12;
@@ -185,7 +200,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 90);
+            this.label5.Location = new System.Drawing.Point(17, 74);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(59, 17);
             this.label5.TabIndex = 11;
@@ -193,7 +208,7 @@
             // 
             // zLabel
             // 
-            this.zLabel.Location = new System.Drawing.Point(79, 147);
+            this.zLabel.Location = new System.Drawing.Point(82, 131);
             this.zLabel.Name = "zLabel";
             this.zLabel.ReadOnly = true;
             this.zLabel.Size = new System.Drawing.Size(100, 22);
@@ -201,7 +216,7 @@
             // 
             // yLabel
             // 
-            this.yLabel.Location = new System.Drawing.Point(79, 117);
+            this.yLabel.Location = new System.Drawing.Point(82, 101);
             this.yLabel.Name = "yLabel";
             this.yLabel.ReadOnly = true;
             this.yLabel.Size = new System.Drawing.Size(100, 22);
@@ -209,7 +224,7 @@
             // 
             // xLabel
             // 
-            this.xLabel.Location = new System.Drawing.Point(79, 85);
+            this.xLabel.Location = new System.Drawing.Point(82, 69);
             this.xLabel.Name = "xLabel";
             this.xLabel.ReadOnly = true;
             this.xLabel.Size = new System.Drawing.Size(100, 22);
@@ -218,7 +233,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 284);
+            this.label2.Location = new System.Drawing.Point(17, 242);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(21, 17);
             this.label2.TabIndex = 20;
@@ -227,7 +242,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 254);
+            this.label6.Location = new System.Drawing.Point(17, 212);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(21, 17);
             this.label6.TabIndex = 19;
@@ -236,7 +251,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(14, 227);
+            this.label7.Location = new System.Drawing.Point(17, 185);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(21, 17);
             this.label7.TabIndex = 18;
@@ -244,7 +259,7 @@
             // 
             // zLabelAvg
             // 
-            this.zLabelAvg.Location = new System.Drawing.Point(79, 284);
+            this.zLabelAvg.Location = new System.Drawing.Point(82, 242);
             this.zLabelAvg.Name = "zLabelAvg";
             this.zLabelAvg.ReadOnly = true;
             this.zLabelAvg.Size = new System.Drawing.Size(100, 22);
@@ -252,7 +267,7 @@
             // 
             // yLabelAvg
             // 
-            this.yLabelAvg.Location = new System.Drawing.Point(79, 254);
+            this.yLabelAvg.Location = new System.Drawing.Point(82, 212);
             this.yLabelAvg.Name = "yLabelAvg";
             this.yLabelAvg.ReadOnly = true;
             this.yLabelAvg.Size = new System.Drawing.Size(100, 22);
@@ -260,7 +275,7 @@
             // 
             // xLabelAvg
             // 
-            this.xLabelAvg.Location = new System.Drawing.Point(79, 222);
+            this.xLabelAvg.Location = new System.Drawing.Point(82, 180);
             this.xLabelAvg.Name = "xLabelAvg";
             this.xLabelAvg.ReadOnly = true;
             this.xLabelAvg.Size = new System.Drawing.Size(100, 22);
@@ -269,7 +284,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 193);
+            this.label8.Location = new System.Drawing.Point(15, 162);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(77, 17);
             this.label8.TabIndex = 14;
@@ -277,7 +292,8 @@
             // 
             // saveToCSVButton
             // 
-            this.saveToCSVButton.Location = new System.Drawing.Point(758, 603);
+            this.saveToCSVButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveToCSVButton.Location = new System.Drawing.Point(909, 608);
             this.saveToCSVButton.Name = "saveToCSVButton";
             this.saveToCSVButton.Size = new System.Drawing.Size(106, 23);
             this.saveToCSVButton.TabIndex = 21;
@@ -287,7 +303,8 @@
             // 
             // easterEggButton
             // 
-            this.easterEggButton.Location = new System.Drawing.Point(741, 424);
+            this.easterEggButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.easterEggButton.Location = new System.Drawing.Point(785, 599);
             this.easterEggButton.Name = "easterEggButton";
             this.easterEggButton.Size = new System.Drawing.Size(103, 32);
             this.easterEggButton.TabIndex = 22;
@@ -298,7 +315,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(763, 358);
+            this.label9.Location = new System.Drawing.Point(746, 360);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(81, 17);
             this.label9.TabIndex = 26;
@@ -307,7 +324,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(785, 325);
+            this.label10.Location = new System.Drawing.Point(768, 327);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(56, 17);
             this.label10.TabIndex = 25;
@@ -315,7 +332,7 @@
             // 
             // bufferSizeTextbox
             // 
-            this.bufferSizeTextbox.Location = new System.Drawing.Point(850, 355);
+            this.bufferSizeTextbox.Location = new System.Drawing.Point(833, 357);
             this.bufferSizeTextbox.Name = "bufferSizeTextbox";
             this.bufferSizeTextbox.ReadOnly = true;
             this.bufferSizeTextbox.Size = new System.Drawing.Size(100, 22);
@@ -323,7 +340,7 @@
             // 
             // uptimeTextbox
             // 
-            this.uptimeTextbox.Location = new System.Drawing.Point(850, 325);
+            this.uptimeTextbox.Location = new System.Drawing.Point(833, 327);
             this.uptimeTextbox.Name = "uptimeTextbox";
             this.uptimeTextbox.ReadOnly = true;
             this.uptimeTextbox.Size = new System.Drawing.Size(100, 22);
@@ -352,7 +369,7 @@
             this.gestureTextbox.Location = new System.Drawing.Point(561, 383);
             this.gestureTextbox.Name = "gestureTextbox";
             this.gestureTextbox.ReadOnly = true;
-            this.gestureTextbox.Size = new System.Drawing.Size(162, 22);
+            this.gestureTextbox.Size = new System.Drawing.Size(148, 22);
             this.gestureTextbox.TabIndex = 28;
             // 
             // accelSequenceTextbox
@@ -360,7 +377,7 @@
             this.accelSequenceTextbox.Location = new System.Drawing.Point(561, 353);
             this.accelSequenceTextbox.Name = "accelSequenceTextbox";
             this.accelSequenceTextbox.ReadOnly = true;
-            this.accelSequenceTextbox.Size = new System.Drawing.Size(162, 22);
+            this.accelSequenceTextbox.Size = new System.Drawing.Size(148, 22);
             this.accelSequenceTextbox.TabIndex = 27;
             // 
             // orientationLabel
@@ -394,7 +411,7 @@
             this.currentAccelTextbox.Location = new System.Drawing.Point(561, 325);
             this.currentAccelTextbox.Name = "currentAccelTextbox";
             this.currentAccelTextbox.ReadOnly = true;
-            this.currentAccelTextbox.Size = new System.Drawing.Size(162, 22);
+            this.currentAccelTextbox.Size = new System.Drawing.Size(148, 22);
             this.currentAccelTextbox.TabIndex = 34;
             // 
             // label14
@@ -433,8 +450,9 @@
             // 
             // datalogCheckbox
             // 
+            this.datalogCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.datalogCheckbox.AutoSize = true;
-            this.datalogCheckbox.Location = new System.Drawing.Point(758, 576);
+            this.datalogCheckbox.Location = new System.Drawing.Point(909, 581);
             this.datalogCheckbox.Name = "datalogCheckbox";
             this.datalogCheckbox.Size = new System.Drawing.Size(106, 21);
             this.datalogCheckbox.TabIndex = 42;
@@ -444,6 +462,7 @@
             // 
             // orientPicBoxPitch
             // 
+            this.orientPicBoxPitch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.orientPicBoxPitch.Location = new System.Drawing.Point(17, 424);
             this.orientPicBoxPitch.Margin = new System.Windows.Forms.Padding(4);
             this.orientPicBoxPitch.Name = "orientPicBoxPitch";
@@ -453,6 +472,7 @@
             // 
             // orientPicBoxRoll
             // 
+            this.orientPicBoxRoll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.orientPicBoxRoll.Location = new System.Drawing.Point(254, 424);
             this.orientPicBoxRoll.Margin = new System.Windows.Forms.Padding(4);
             this.orientPicBoxRoll.Name = "orientPicBoxRoll";
@@ -463,7 +483,7 @@
             // gameLabel
             // 
             this.gameLabel.AutoSize = true;
-            this.gameLabel.Location = new System.Drawing.Point(750, 474);
+            this.gameLabel.Location = new System.Drawing.Point(841, 449);
             this.gameLabel.Name = "gameLabel";
             this.gameLabel.Size = new System.Drawing.Size(203, 17);
             this.gameLabel.TabIndex = 45;
@@ -472,7 +492,7 @@
             // 
             // gameGestureTextbox
             // 
-            this.gameGestureTextbox.Location = new System.Drawing.Point(750, 504);
+            this.gameGestureTextbox.Location = new System.Drawing.Point(841, 479);
             this.gameGestureTextbox.Name = "gameGestureTextbox";
             this.gameGestureTextbox.ReadOnly = true;
             this.gameGestureTextbox.Size = new System.Drawing.Size(203, 22);
@@ -481,7 +501,7 @@
             // 
             // gameReset
             // 
-            this.gameReset.Location = new System.Drawing.Point(878, 541);
+            this.gameReset.Location = new System.Drawing.Point(969, 516);
             this.gameReset.Name = "gameReset";
             this.gameReset.Size = new System.Drawing.Size(75, 23);
             this.gameReset.TabIndex = 47;
@@ -493,7 +513,7 @@
             // gameWonLabel
             // 
             this.gameWonLabel.AutoSize = true;
-            this.gameWonLabel.Location = new System.Drawing.Point(750, 541);
+            this.gameWonLabel.Location = new System.Drawing.Point(841, 516);
             this.gameWonLabel.Name = "gameWonLabel";
             this.gameWonLabel.Size = new System.Drawing.Size(65, 17);
             this.gameWonLabel.TabIndex = 48;
@@ -502,6 +522,7 @@
             // 
             // orientPicBoxYaw
             // 
+            this.orientPicBoxYaw.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.orientPicBoxYaw.Location = new System.Drawing.Point(495, 424);
             this.orientPicBoxYaw.Margin = new System.Windows.Forms.Padding(4);
             this.orientPicBoxYaw.Name = "orientPicBoxYaw";
@@ -512,7 +533,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(745, 386);
+            this.label13.Location = new System.Drawing.Point(728, 388);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(96, 17);
             this.label13.TabIndex = 51;
@@ -520,27 +541,160 @@
             // 
             // bytesToReadTextbox
             // 
-            this.bytesToReadTextbox.Location = new System.Drawing.Point(850, 383);
+            this.bytesToReadTextbox.Location = new System.Drawing.Point(833, 385);
             this.bytesToReadTextbox.Name = "bytesToReadTextbox";
             this.bytesToReadTextbox.ReadOnly = true;
             this.bytesToReadTextbox.Size = new System.Drawing.Size(100, 22);
             this.bytesToReadTextbox.TabIndex = 50;
             // 
-            // xstddevtest
+            // label16
             // 
-            this.xstddevtest.AutoSize = true;
-            this.xstddevtest.Location = new System.Drawing.Point(33, 327);
-            this.xstddevtest.Name = "xstddevtest";
-            this.xstddevtest.Size = new System.Drawing.Size(54, 17);
-            this.xstddevtest.TabIndex = 52;
-            this.xstddevtest.Text = "label16";
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(17, 358);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(21, 17);
+            this.label16.TabIndex = 59;
+            this.label16.Text = "Z:";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(17, 328);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(21, 17);
+            this.label17.TabIndex = 58;
+            this.label17.Text = "Y:";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(17, 301);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(21, 17);
+            this.label18.TabIndex = 57;
+            this.label18.Text = "X:";
+            // 
+            // gravZTextbox
+            // 
+            this.gravZTextbox.Location = new System.Drawing.Point(82, 358);
+            this.gravZTextbox.Name = "gravZTextbox";
+            this.gravZTextbox.ReadOnly = true;
+            this.gravZTextbox.Size = new System.Drawing.Size(100, 22);
+            this.gravZTextbox.TabIndex = 56;
+            // 
+            // gravYTextbox
+            // 
+            this.gravYTextbox.Location = new System.Drawing.Point(82, 328);
+            this.gravYTextbox.Name = "gravYTextbox";
+            this.gravYTextbox.ReadOnly = true;
+            this.gravYTextbox.Size = new System.Drawing.Size(100, 22);
+            this.gravYTextbox.TabIndex = 55;
+            // 
+            // gravXTextbox
+            // 
+            this.gravXTextbox.Location = new System.Drawing.Point(82, 296);
+            this.gravXTextbox.Name = "gravXTextbox";
+            this.gravXTextbox.ReadOnly = true;
+            this.gravXTextbox.Size = new System.Drawing.Size(100, 22);
+            this.gravXTextbox.TabIndex = 54;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(15, 276);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(68, 17);
+            this.label19.TabIndex = 53;
+            this.label19.Text = "GRAVITY";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(17, 386);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(44, 17);
+            this.label20.TabIndex = 61;
+            this.label20.Text = "Total:";
+            // 
+            // gravTotalTextbox
+            // 
+            this.gravTotalTextbox.Location = new System.Drawing.Point(82, 386);
+            this.gravTotalTextbox.Name = "gravTotalTextbox";
+            this.gravTotalTextbox.ReadOnly = true;
+            this.gravTotalTextbox.Size = new System.Drawing.Size(100, 22);
+            this.gravTotalTextbox.TabIndex = 60;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(951, 388);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(63, 17);
+            this.label21.TabIndex = 67;
+            this.label21.Text = "Z Buffer:";
+            // 
+            // zBufferTextbox
+            // 
+            this.zBufferTextbox.Location = new System.Drawing.Point(1020, 386);
+            this.zBufferTextbox.Name = "zBufferTextbox";
+            this.zBufferTextbox.ReadOnly = true;
+            this.zBufferTextbox.Size = new System.Drawing.Size(100, 22);
+            this.zBufferTextbox.TabIndex = 66;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(951, 360);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(63, 17);
+            this.label22.TabIndex = 65;
+            this.label22.Text = "Y Buffer:";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(951, 331);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(63, 17);
+            this.label23.TabIndex = 64;
+            this.label23.Text = "X Buffer:";
+            // 
+            // yBufferTextbox
+            // 
+            this.yBufferTextbox.Location = new System.Drawing.Point(1020, 358);
+            this.yBufferTextbox.Name = "yBufferTextbox";
+            this.yBufferTextbox.ReadOnly = true;
+            this.yBufferTextbox.Size = new System.Drawing.Size(100, 22);
+            this.yBufferTextbox.TabIndex = 63;
+            // 
+            // xBufferTextbox
+            // 
+            this.xBufferTextbox.Location = new System.Drawing.Point(1020, 328);
+            this.xBufferTextbox.Name = "xBufferTextbox";
+            this.xBufferTextbox.ReadOnly = true;
+            this.xBufferTextbox.Size = new System.Drawing.Size(100, 22);
+            this.xBufferTextbox.TabIndex = 62;
             // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(962, 644);
-            this.Controls.Add(this.xstddevtest);
+            this.ClientSize = new System.Drawing.Size(1132, 643);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.zBufferTextbox);
+            this.Controls.Add(this.label22);
+            this.Controls.Add(this.label23);
+            this.Controls.Add(this.yBufferTextbox);
+            this.Controls.Add(this.xBufferTextbox);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.gravTotalTextbox);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.gravZTextbox);
+            this.Controls.Add(this.gravYTextbox);
+            this.Controls.Add(this.gravXTextbox);
+            this.Controls.Add(this.label19);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.bytesToReadTextbox);
             this.Controls.Add(this.orientPicBoxYaw);
@@ -587,7 +741,7 @@
             this.Controls.Add(this.xyzChart);
             this.Controls.Add(this.serialComboBox);
             this.Controls.Add(this.serialConnectButton);
-            this.MinimumSize = new System.Drawing.Size(980, 480);
+            this.MinimumSize = new System.Drawing.Size(1150, 690);
             this.Name = "mainForm";
             this.Text = "Accelerated Gestures";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -650,7 +804,21 @@
         private System.Windows.Forms.PictureBox orientPicBoxYaw;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox bytesToReadTextbox;
-        private System.Windows.Forms.Label xstddevtest;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox gravZTextbox;
+        private System.Windows.Forms.TextBox gravYTextbox;
+        private System.Windows.Forms.TextBox gravXTextbox;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox gravTotalTextbox;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox zBufferTextbox;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox yBufferTextbox;
+        private System.Windows.Forms.TextBox xBufferTextbox;
     }
 }
 

@@ -65,16 +65,19 @@ namespace Mech423Lab1
         const int orientHighThresh = 145;
         const int orientLowThresh = 105;
         const int gestureThresh = 180;
-        const int gestureThreshNeg = 120;
+        const int gestureThreshNeg = 100;
         const int gestureDisplayLimit = 1000; // 1000ms to display gesture
         const int gestureCheckLimit = 2000; // 2000ms to check for new gesture
 
         int bytesInQueue;
+        int bytesToRead;
         string gestureState = ""; // global variable to set gestures
         int gestureCount = 0; // number of gestures detected
         int[] averages = new int[] { 0, 0, 0 };
         double[] stdDevOutput = new double[] { 0, 0, 0 }; // to store stddevs
         string fileName = ""; // trigger to check if DialogBox.FileName is initialized
+
+
 
         bool gameState = false; // display game gestures (cheat way of not using more logic)
         string gameString = ""; // another cheat way to pass displayCombo into game
@@ -190,13 +193,11 @@ namespace Mech423Lab1
 
             while ((serialCom.IsOpen) && (serialCom.BytesToRead > 0))
             {
+                bytesToRead = serialCom.BytesToRead;
                 try
                 {
                     if (serialCom.ReadByte() == 255) // check for start byte
                     {
-                        
-                        //bytesToReadTextbox.Text = serialCom.BytesToRead.ToString();
-
                         currentByte = serialCom.ReadByte();
                         xDataQueue.Enqueue(currentByte); // xVal
                         xDataQueueAvg.Enqueue(currentByte); // xVal for averaging
@@ -230,8 +231,12 @@ namespace Mech423Lab1
 
             if (serialCom.IsOpen)
             {
-                // Show bytes in queue
+                // Show bytes in queues
                 bufferSizeTextbox.Text = (bytesInQueue).ToString();
+                xBufferTextbox.Text = xDataQueue.Count().ToString();
+                yBufferTextbox.Text = yDataQueue.Count().ToString();
+                zBufferTextbox.Text = zDataQueue.Count().ToString();
+                bytesToReadTextbox.Text = bytesToRead.ToString();
 
                 // Populate real time acceleration
                 RealTimeAccel();
@@ -280,9 +285,9 @@ namespace Mech423Lab1
 
                 // Get averages of last 100 elements
                 AvgAccel(averages); // passed by object
-                xLabelAvg.Text = stdDevOutput[0].ToString();
-                yLabelAvg.Text = stdDevOutput[1].ToString();
-                zLabelAvg.Text = stdDevOutput[2].ToString();
+                xLabelAvg.Text = string.Format("{0:0.00}", stdDevOutput[0]);
+                yLabelAvg.Text = string.Format("{0:0.00}", stdDevOutput[1]);
+                zLabelAvg.Text = string.Format("{0:0.00}", stdDevOutput[2]);
 
                 // Write to CSV
                 if ((datalogCheckbox.Checked) && (fileName != ""))
@@ -298,6 +303,8 @@ namespace Mech423Lab1
                 {
                     EasterEggGame();
                 }
+
+                GetGravity();
 
                 // IronPython get FFT
                 GetFFT();
@@ -497,10 +504,18 @@ namespace Mech423Lab1
                 {
                     gestureState = "+Z";
                 }
-                //else if (accData.z < gestureThreshNeg) // negative threshold
-                //{
-                //    gestureState = "-Z";
-                //}
+                else if (accData.x < gestureThreshNeg) // negative threshold
+                {
+                    gestureState = "-X";
+                }
+                else if (accData.y < gestureThreshNeg) // negative threshold
+                {
+                    gestureState = "-Y";
+                }
+                else if (accData.z < gestureThreshNeg) // negative threshold
+                {
+                    gestureState = "-Z";
+                }
                 else
                 {
                     gestureState = "";
@@ -563,30 +578,30 @@ namespace Mech423Lab1
             accelSequenceTextbox.Text = output;
             gameString = output; // for the game
 
-            if (output == "+X")
+            if (output == "-Z")
             {
-                gestureTextbox.Text = "Simple punch";
+                gestureTextbox.Text = "Free fall";
                 if (playSound)
                 {
-                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\simplePunch.wav");
+                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\fallSound.wav");
                     simpleSound.Play();
                 }
             }
-            else if (output == "+Z +X")
+            else if (output == "+X +Y")
             {
-                gestureTextbox.Text = "High punch";
+                gestureTextbox.Text = "Frisbee throw";
                 if (playSound)
                 {
-                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\highPunch.wav");
+                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\throwSound.wav");
                     simpleSound.Play();
                 }
             }
-            else if (output == "+X +Y +Z")
+            else if (output == "+Z +X -X")
             {
-                gestureTextbox.Text = "Right hook";
+                gestureTextbox.Text = "Wave";
                 if (playSound)
                 {
-                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\rightHook.wav");
+                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\helloSound.wav");
                     simpleSound.Play();
                 }
             }
@@ -681,7 +696,7 @@ namespace Mech423Lab1
             if (!gameState)
             {
                 Random rnd = new Random(); // randomize order of strings to win
-                List<string> gestureOptions = new List<string> { "+Z +Z +Y +Z", "+Y +X +Z +Y", "+X +Z +X +Z" };
+                List<string> gestureOptions = new List<string> { "+Z -Z +Y -X", "+Y -X +Z +Y", "-X +Z -X +Z" };
                 gameGestureTextbox.Text = gestureOptions[rnd.Next(0, 3)];
                 gameState = true; // so that this loop only happens once
             }
@@ -696,6 +711,18 @@ namespace Mech423Lab1
                 gameWonLabel.Visible = true;
                 gameGestureTextbox.Text = "";
             }
+        }
+
+        public void GetGravity()
+        {
+            double xAccG = Map(accData.x, 0, 255, -5, 5);
+            double yAccG = Map(accData.y, 0, 255, -5, 5);
+            double zAccG = Map(accData.z, 0, 255, -5, 5); // -5 and 5 times force of gravity limit
+
+            gravXTextbox.Text = string.Format("{0:0.00}", xAccG);
+            gravYTextbox.Text = string.Format("{0:0.00}", yAccG);
+            gravZTextbox.Text = string.Format("{0:0.00}", zAccG);
+            gravTotalTextbox.Text = string.Format("{0:0.00}", (Math.Sqrt(xAccG * xAccG + yAccG * yAccG + zAccG * zAccG)));
         }
 
         private void GetFFT()
