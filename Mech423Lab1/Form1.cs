@@ -63,7 +63,6 @@ namespace Mech423Lab1
 
         bool gameState = false; // display game gestures (cheat way of not using more logic)
         string gameString = ""; // another cheat way to pass displayCombo into game
-        bool gameWon = false; // more cheat way
 
         accel accData = new accel(); // create new object accData to pass around
         ypr YPR = new ypr(); // create new object YPR to pass around
@@ -469,6 +468,11 @@ namespace Mech423Lab1
             }
             else
             {
+                // Play sound effect
+                SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\easterEgg.wav");
+                simpleSound.Play();
+
+                // Show hidden features
                 gameLabel.Visible = true;
                 gameGestureTextbox.Visible = true;
                 gameReset.Visible = true;
@@ -615,17 +619,19 @@ namespace Mech423Lab1
             if (!gameState)
             {
                 Random rnd = new Random(); // randomize order of strings to win
-                List<string> gestureOptions = new List<string> { "+Z +Z +Z", "+Y +X +Y", "+X +X +Z" };
+                List<string> gestureOptions = new List<string> { "+Z +Z +Y +Z", "+Y +X +Z +Y", "+X +Z +X +Z" };
                 gameGestureTextbox.Text = gestureOptions[rnd.Next(0, 3)];
                 gameState = true; // so that this loop only happens once
-                gameWon = false;
             }
 
             // Winning condition; need gameWon condition else empty gameString will match
-            if ((gameString == gameGestureTextbox.Text) && (gameWon == false))
+            if ((gameString == gameGestureTextbox.Text) && (gameString != ""))
             {
+                // Play sound effect
+                SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\easterEggWin.wav");
+                simpleSound.Play();
+
                 gameWonLabel.Visible = true;
-                gameWon = true;
                 gameGestureTextbox.Text = "";
             }
         }
