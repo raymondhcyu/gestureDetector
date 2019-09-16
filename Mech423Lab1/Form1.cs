@@ -476,17 +476,14 @@ namespace Mech423Lab1
 
         public static void addRecord(int xAcc, int yAcc, int zAcc, string filepath)
         {
-            // string records = xAcc.ToString() + "," + yAcc.ToString() + "," + zAcc.ToString();
             List<string> records = new List<string>() {xAcc.ToString(), yAcc.ToString(), zAcc.ToString(), ""};
-
-            // IEnumerable<string> records = new string[] {xAcc.ToString(), yAcc.ToString(), zAcc.ToString(), "\n" };
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filepath, true))
             {
                 using (var csv = new CsvHelper.CsvWriter(file))
                 {
                     csv.WriteField(records);
-                    csv.NextRecord();
+                    csv.NextRecord(); // prepares new data to write (carriage return in CSV)
                 }
             }   
         }
