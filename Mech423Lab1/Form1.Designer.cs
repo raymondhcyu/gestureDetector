@@ -54,7 +54,7 @@
             this.yLabelAvg = new System.Windows.Forms.TextBox();
             this.xLabelAvg = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.saveToCSVButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -68,6 +68,14 @@
             this.orientationTextbox = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.currentAccelTextbox = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.yawTextbox = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.pitchTextbox = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.rollTextbox = new System.Windows.Forms.TextBox();
+            this.datalogCheckbox = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.xyzChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -257,22 +265,23 @@
             this.label8.TabIndex = 14;
             this.label8.Text = "AVERAGE";
             // 
-            // button1
+            // saveToCSVButton
             // 
-            this.button1.Location = new System.Drawing.Point(772, 453);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 21;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.saveToCSVButton.Location = new System.Drawing.Point(741, 453);
+            this.saveToCSVButton.Name = "saveToCSVButton";
+            this.saveToCSVButton.Size = new System.Drawing.Size(106, 23);
+            this.saveToCSVButton.TabIndex = 21;
+            this.saveToCSVButton.Text = "Save to CSV";
+            this.saveToCSVButton.UseVisualStyleBackColor = true;
+            this.saveToCSVButton.Click += new System.EventHandler(this.SaveToCSVButton_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(674, 453);
+            this.button2.Location = new System.Drawing.Point(620, 453);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(103, 23);
             this.button2.TabIndex = 22;
-            this.button2.Text = "button2";
+            this.button2.Text = "Easter Egg";
             this.button2.UseVisualStyleBackColor = true;
             // 
             // label9
@@ -377,11 +386,88 @@
             this.currentAccelTextbox.Size = new System.Drawing.Size(162, 22);
             this.currentAccelTextbox.TabIndex = 34;
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(12, 355);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(38, 17);
+            this.label13.TabIndex = 37;
+            this.label13.Text = "Yaw:";
+            // 
+            // yawTextbox
+            // 
+            this.yawTextbox.Location = new System.Drawing.Point(108, 355);
+            this.yawTextbox.Name = "yawTextbox";
+            this.yawTextbox.ReadOnly = true;
+            this.yawTextbox.Size = new System.Drawing.Size(100, 22);
+            this.yawTextbox.TabIndex = 36;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(12, 383);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(43, 17);
+            this.label14.TabIndex = 39;
+            this.label14.Text = "Pitch:";
+            // 
+            // pitchTextbox
+            // 
+            this.pitchTextbox.Location = new System.Drawing.Point(108, 383);
+            this.pitchTextbox.Name = "pitchTextbox";
+            this.pitchTextbox.ReadOnly = true;
+            this.pitchTextbox.Size = new System.Drawing.Size(100, 22);
+            this.pitchTextbox.TabIndex = 38;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(12, 411);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(36, 17);
+            this.label15.TabIndex = 41;
+            this.label15.Text = "Roll:";
+            // 
+            // rollTextbox
+            // 
+            this.rollTextbox.Location = new System.Drawing.Point(108, 411);
+            this.rollTextbox.Name = "rollTextbox";
+            this.rollTextbox.ReadOnly = true;
+            this.rollTextbox.Size = new System.Drawing.Size(100, 22);
+            this.rollTextbox.TabIndex = 40;
+            // 
+            // datalogCheckbox
+            // 
+            this.datalogCheckbox.AutoSize = true;
+            this.datalogCheckbox.Location = new System.Drawing.Point(741, 426);
+            this.datalogCheckbox.Name = "datalogCheckbox";
+            this.datalogCheckbox.Size = new System.Drawing.Size(106, 21);
+            this.datalogCheckbox.TabIndex = 42;
+            this.datalogCheckbox.Text = "Datalogging";
+            this.datalogCheckbox.UseVisualStyleBackColor = true;
+            this.datalogCheckbox.CheckedChanged += new System.EventHandler(this.DatalogCheckbox_CheckedChanged);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(364, 382);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 22);
+            this.textBox1.TabIndex = 43;
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(962, 488);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.datalogCheckbox);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.rollTextbox);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.pitchTextbox);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.yawTextbox);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.currentAccelTextbox);
             this.Controls.Add(this.orientationLabel);
@@ -395,7 +481,7 @@
             this.Controls.Add(this.bufferSizeTextbox);
             this.Controls.Add(this.uptimeTextbox);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.saveToCSVButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label7);
@@ -446,7 +532,7 @@
         private System.Windows.Forms.TextBox yLabelAvg;
         private System.Windows.Forms.TextBox xLabelAvg;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button saveToCSVButton;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
@@ -460,6 +546,14 @@
         private System.Windows.Forms.TextBox orientationTextbox;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox currentAccelTextbox;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox yawTextbox;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox pitchTextbox;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox rollTextbox;
+        private System.Windows.Forms.CheckBox datalogCheckbox;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

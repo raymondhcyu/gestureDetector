@@ -22,11 +22,25 @@ namespace Mech423Lab1
             public int x;
             public int y;
             public int z;
-            public accel()
+            public accel() // default constructor to zero
             {
                 x = 0;
                 y = 0;
                 z = 0;
+            }
+        }
+
+        class ypr
+        {
+            public int yaw;
+            public int pitch;
+            public int roll;
+
+            public ypr() // default constructor
+            {
+                yaw = 0;
+                pitch = 0;
+                roll = 0;
             }
         }
 
@@ -42,20 +56,26 @@ namespace Mech423Lab1
         string gestureState = ""; // global variable to set gestures
         int gestureCount = 0; // number of gestures detected
         int[] averages = new int[] { 0, 0, 0 };
-
+        string fileName = ""; // trigger to check if DialogBox.FileName is initialized
 
         accel accData = new accel(); // create new object accData to pass around
+        ypr YPR = new ypr(); // create new object YPR to pass around
         Stopwatch uptimeTimer = new Stopwatch(); // timer for uptime
         Stopwatch gestureTimer = new Stopwatch(); // timer for gestures
 
-        // Create queues for x, y, and z data; running averages; list of gestures
+        // Create queues for x, y, and z data
         ConcurrentQueue<int> xDataQueue = new ConcurrentQueue<int>();
         ConcurrentQueue<int> yDataQueue = new ConcurrentQueue<int>();
         ConcurrentQueue<int> zDataQueue = new ConcurrentQueue<int>();
+
+        // Queues for average data
         ConcurrentQueue<int> xDataQueueAvg = new ConcurrentQueue<int>();
         ConcurrentQueue<int> yDataQueueAvg = new ConcurrentQueue<int>();
         ConcurrentQueue<int> zDataQueueAvg = new ConcurrentQueue<int>();
+
+        // Queues for gestures and datalogging
         ConcurrentQueue<string> gestureQueue = new ConcurrentQueue<string>();
+        ConcurrentQueue<string> dataLogQueue = new ConcurrentQueue<string>();
 
         public mainForm()
         { 
@@ -200,7 +220,7 @@ namespace Mech423Lab1
 
                     gestureState = ""; // reset gesture
                     DisplayGesture();
-
+                    DisplayCombo();
 
                     if (gestureCount != 0) // restart timer if gesture detected
                     {
@@ -212,7 +232,6 @@ namespace Mech423Lab1
                         gestureTimer.Reset();
                     }
                 }
-                DisplayCombo();
 
                 // Get averages of last 100 elements
                 AvgAccel(averages); // passed by object
@@ -220,6 +239,14 @@ namespace Mech423Lab1
                 yLabelAvg.Text = averages[1].ToString();
                 zLabelAvg.Text = averages[2].ToString();
 
+                // Write to CSV
+                if ((datalogCheckbox.Checked) && (fileName != ""))
+                {
+                    addRecord(accData.x, accData.y, accData.z, fileName);
+                }
+
+                // Display yaw pitch roll
+                GetYPR();
             }
         }
 
@@ -361,13 +388,11 @@ namespace Mech423Lab1
                 {
                     gestureState = "";
                 }
-
-                DisplayGesture(); // show gesture 
-
                 if (gestureState != "")
                 {
                     StoreGesture();
                 }
+                DisplayGesture(); // show gesture 
             }
         }
 
@@ -380,7 +405,8 @@ namespace Mech423Lab1
         private void StoreGesture()
         {
             gestureQueue.Enqueue(gestureState);
-            gestureCount = gestureQueue.Count(); // get num gestures in queue    
+            gestureCount = gestureQueue.Count(); // get num gestures in queue 
+            DisplayCombo();
         }
 
         // Show combination of gesture and show gesture name
@@ -406,6 +432,61 @@ namespace Mech423Lab1
             {
                 gestureTextbox.Text = "";
             }
+        }
+
+        // Calculate and display yaw pitch roll
+        private void GetYPR()
+        {
+            double roll = (Math.Atan2(-1 * accData.y, accData.z) * 180) / Math.PI;
+            double pitch = (Math.Atan2(accData.x, Math.Sqrt(accData.y * accData.y + accData.z * accData.z)) * 180) / Math.PI;
+
+            YPR.roll = System.Convert.ToInt32(roll);
+            YPR.pitch = System.Convert.ToInt32(pitch);
+
+            rollTextbox.Text = YPR.roll.ToString();
+            pitchTextbox.Text = YPR.pitch.ToString();
+        }
+
+        private void DatalogCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            // nothing for now
+        }
+
+        private void SaveToCSVButton_Click(object sender, EventArgs e)
+        {
+            if (!serialCom.IsOpen)
+            {
+                MessageBox.Show("Connect to device first!");
+            }
+            else
+            {
+                MessageBox.Show("Instructions: \n\n1) Enter a filename\n" +
+                    "2) Check the datalog checkbox\n" +
+                    "3) Profit");
+
+                SaveFileDialog dialogBox = new SaveFileDialog();
+                dialogBox.InitialDirectory = @"C:\Users\Safet\source\repos\Mech423Lab1";
+                dialogBox.Filter = "CSV Files (*.csv)|*.csv";
+                dialogBox.DefaultExt = "csv";
+                dialogBox.ShowDialog();
+
+                fileName = dialogBox.FileName; // save to global variable
+            }
+        }
+
+        public static void addRecord(int xAcc, int yAcc, int zAcc, string filepath)
+        {
+            string records = xAcc.ToString() + "," + yAcc.ToString() + "," + zAcc.ToString();
+
+            // IEnumerable<string> records = new string[] {xAcc.ToString(), yAcc.ToString(), zAcc.ToString(), "\n" };
+
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filepath, true))
+                {
+                    using (var csv = new CsvHelper.CsvWriter(file))
+                    {
+                    csv.WriteField(records);
+                    }
+                }
         }
     }
 }
