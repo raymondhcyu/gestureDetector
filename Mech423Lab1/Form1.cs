@@ -46,6 +46,20 @@ namespace Mech423Lab1
             }
         }
 
+        class stddev
+        {
+            public double X;
+            public double Y;
+            public double Z;
+
+            public stddev()
+            {
+                X = 0;
+                Y = 0;
+                Z = 0;
+            }
+        }
+
         const int chartMax = 100; // max intervals of live reading else appends to end
         const int avgAccelNum = 100; // take avg of last values
         const int orientHighThresh = 145;
@@ -59,6 +73,7 @@ namespace Mech423Lab1
         string gestureState = ""; // global variable to set gestures
         int gestureCount = 0; // number of gestures detected
         int[] averages = new int[] { 0, 0, 0 };
+        double[] stdDevOutput = new double[] { 0, 0, 0 }; // to store stddevs
         string fileName = ""; // trigger to check if DialogBox.FileName is initialized
 
         bool gameState = false; // display game gestures (cheat way of not using more logic)
@@ -66,9 +81,12 @@ namespace Mech423Lab1
 
         accel accData = new accel(); // create new object accData to pass around
         ypr YPR = new ypr(); // create new object YPR to pass around
+        stddev stdDev = new stddev(); // create new object for std deviations
         Stopwatch uptimeTimer = new Stopwatch(); // timer for uptime
         Stopwatch gestureTimer = new Stopwatch(); // timer for gestures
-        Bitmap pitchLevel, pitchUp, pitchDown, pitchInverted, rollLevel, rollLeft, rollRight, rollInverted;
+        Bitmap pitchLevel, pitchUp, pitchDown, pitchInverted, 
+            rollLevel, rollLeft, rollRight, rollInverted,
+            yawLevel, yawLeft, yawRight, yawInverted;
 
         // Create queues for x, y, and z data
         ConcurrentQueue<int> xDataQueue = new ConcurrentQueue<int>();
@@ -107,8 +125,13 @@ namespace Mech423Lab1
             rollLeft = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\rollLeft.png");
             rollRight = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\rollRight.png");
             rollInverted = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\rollInverted.png");
+            yawLevel = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\yawLevel.png");
+            yawLeft = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\yawLeft.png");
+            yawRight = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\yawRight.png");
+            yawInverted = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\yawInverted.png");
             orientPicBoxPitch.SizeMode = PictureBoxSizeMode.StretchImage;
             orientPicBoxRoll.SizeMode = PictureBoxSizeMode.StretchImage;
+            orientPicBoxYaw.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void SerialConnectButton_Click(object sender, EventArgs e)
@@ -171,6 +194,9 @@ namespace Mech423Lab1
                 {
                     if (serialCom.ReadByte() == 255) // check for start byte
                     {
+                        
+                        //bytesToReadTextbox.Text = serialCom.BytesToRead.ToString();
+
                         currentByte = serialCom.ReadByte();
                         xDataQueue.Enqueue(currentByte); // xVal
                         xDataQueueAvg.Enqueue(currentByte); // xVal for averaging
@@ -254,9 +280,9 @@ namespace Mech423Lab1
 
                 // Get averages of last 100 elements
                 AvgAccel(averages); // passed by object
-                xLabelAvg.Text = averages[0].ToString();
-                yLabelAvg.Text = averages[1].ToString();
-                zLabelAvg.Text = averages[2].ToString();
+                xLabelAvg.Text = stdDevOutput[0].ToString();
+                yLabelAvg.Text = stdDevOutput[1].ToString();
+                zLabelAvg.Text = stdDevOutput[2].ToString();
 
                 // Write to CSV
                 if ((datalogCheckbox.Checked) && (fileName != ""))
@@ -272,6 +298,9 @@ namespace Mech423Lab1
                 {
                     EasterEggGame();
                 }
+
+                // IronPython get FFT
+                GetFFT();
             }
         }
 
@@ -324,10 +353,12 @@ namespace Mech423Lab1
             }
         }
 
-        // Display average x, y, z accelerations; avg passed by reference
+        // Display std deviation of x, y, z accelerations of last 100 points; avg passed by reference
+        // Process made sequentially; organization deprioritized due to time limit
         private void AvgAccel(int[] avg)
         {
             int[] sum = new int[] { 0, 0, 0 };
+            int[] stdSum = new int[] { 0, 0, 0 };
             int currentVal;
 
             // Dequeue anything over 100
@@ -344,7 +375,7 @@ namespace Mech423Lab1
                 zDataQueueAvg.TryDequeue(out currentVal);
             }
 
-            // Calculate X averages
+            // Calculate X avgs
             foreach (int i in xDataQueueAvg)
             {
                 sum[0] += i;
@@ -367,6 +398,31 @@ namespace Mech423Lab1
             {
                 avg[i] = sum[i] / avgAccelNum;
             }
+
+            // Get std deviations
+            // Calculate X stddev sum
+            foreach (int i in xDataQueueAvg)
+            {
+                stdSum[0] += (i - avg[0]) * (i - avg[0]); // (i - avg)^2
+            }
+
+            // Calculate Y stddev sum
+            foreach (int i in yDataQueueAvg)
+            {
+                stdSum[1] += (i - avg[1]) * (i - avg[1]); // (i - avg)^2
+            }
+
+            // Calculate Z stddev sum
+            foreach (int i in zDataQueueAvg)
+            {
+                stdSum[2] += (i - avg[2]) * (i - avg[2]); // (i - avg)^2
+            }
+
+            // Get stddeves
+            for (int i = 0; i < stdDevOutput.Length; i++)
+            {
+                stdDevOutput[i] = (1.0 / 100.0) * Math.Sqrt(stdSum[i]);
+            }
         }
 
         // Check accelerations and display orientation
@@ -377,24 +433,28 @@ namespace Mech423Lab1
                 orientationTextbox.Text = "Roll left";
                 orientPicBoxPitch.Image = pitchLevel;
                 orientPicBoxRoll.Image = rollLeft;
+                orientPicBoxYaw.Image = yawLeft;
             }
             else if (accData.x < orientLowThresh)
             {
                 orientationTextbox.Text = "Roll right";
                 orientPicBoxPitch.Image = pitchLevel;
                 orientPicBoxRoll.Image = rollRight;
+                orientPicBoxYaw.Image = yawRight;
             }
             else if (accData.y > orientHighThresh)
             {
                 orientationTextbox.Text = "Pitch up";
                 orientPicBoxPitch.Image = pitchUp;
                 orientPicBoxRoll.Image = rollLevel;
+                orientPicBoxYaw.Image = yawLevel;
             }
             else if (accData.y < orientLowThresh)
             {
                 orientationTextbox.Text = "Pitch down";
                 orientPicBoxPitch.Image = pitchDown;
                 orientPicBoxRoll.Image = rollLevel;
+                orientPicBoxYaw.Image = yawLevel;
             }
 
             else if (accData.z > orientHighThresh)
@@ -402,6 +462,7 @@ namespace Mech423Lab1
                 orientationTextbox.Text = "Level";
                 orientPicBoxPitch.Image = pitchLevel;
                 orientPicBoxRoll.Image = rollLevel;
+                orientPicBoxYaw.Image = yawLevel;
             }
 
             else if (accData.z < orientLowThresh)
@@ -409,6 +470,7 @@ namespace Mech423Lab1
                 orientationTextbox.Text = "Inverted";
                 orientPicBoxPitch.Image = pitchInverted;
                 orientPicBoxRoll.Image = rollInverted;
+                orientPicBoxYaw.Image = yawInverted;
             }
             else
                 orientationTextbox.Text = "";
@@ -634,6 +696,11 @@ namespace Mech423Lab1
                 gameWonLabel.Visible = true;
                 gameGestureTextbox.Text = "";
             }
+        }
+
+        private void GetFFT()
+        {
+            // var pyScript = @"def applyFFT(): return fftdf";
         }
     }
 }
