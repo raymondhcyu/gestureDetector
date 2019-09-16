@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Concurrent;
+using System.Media;
+using System.Drawing.Drawing2D;
 
 namespace Mech423Lab1
 {
@@ -49,6 +51,7 @@ namespace Mech423Lab1
         const int orientHighThresh = 145;
         const int orientLowThresh = 105;
         const int gestureThresh = 180;
+        const int gestureThreshNeg = 120;
         const int gestureDisplayLimit = 1000; // 1000ms to display gesture
         const int gestureCheckLimit = 2000; // 2000ms to check for new gesture
 
@@ -58,10 +61,15 @@ namespace Mech423Lab1
         int[] averages = new int[] { 0, 0, 0 };
         string fileName = ""; // trigger to check if DialogBox.FileName is initialized
 
+        bool gameState = false; // display game gestures (cheat way of not using more logic)
+        string gameString = ""; // another cheat way to pass displayCombo into game
+        bool gameWon = false; // more cheat way
+
         accel accData = new accel(); // create new object accData to pass around
         ypr YPR = new ypr(); // create new object YPR to pass around
         Stopwatch uptimeTimer = new Stopwatch(); // timer for uptime
         Stopwatch gestureTimer = new Stopwatch(); // timer for gestures
+        Bitmap pitchLevel, pitchUp, pitchDown, pitchInverted, rollLevel, rollLeft, rollRight, rollInverted;
 
         // Create queues for x, y, and z data
         ConcurrentQueue<int> xDataQueue = new ConcurrentQueue<int>();
@@ -90,6 +98,18 @@ namespace Mech423Lab1
             {
                 serialComboBox.Items.Add(port);
             }
+
+            // Load images for orientation
+            pitchLevel = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\pitchLevel.png");
+            pitchUp = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\pitchUp.png");
+            pitchDown = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\pitchDown.png");
+            pitchInverted = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\pitchInverted.png");
+            rollLevel = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\rollLevel.png");
+            rollLeft = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\rollLeft.png");
+            rollRight = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\rollRight.png");
+            rollInverted = new Bitmap(@"C:\Users\Safet\source\repos\Mech423Lab1\rollInverted.png");
+            orientPicBoxPitch.SizeMode = PictureBoxSizeMode.StretchImage;
+            orientPicBoxRoll.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void SerialConnectButton_Click(object sender, EventArgs e)
@@ -220,7 +240,7 @@ namespace Mech423Lab1
 
                     gestureState = ""; // reset gesture
                     DisplayGesture();
-                    DisplayCombo();
+                    DisplayCombo(false);
 
                     if (gestureCount != 0) // restart timer if gesture detected
                     {
@@ -245,8 +265,14 @@ namespace Mech423Lab1
                     addRecord(accData.x, accData.y, accData.z, fileName);
                 }
 
-                // Display yaw pitch roll
+                // Display yaw pitch roll angles
                 GetYPR();
+
+                // Easter egg
+                if (gameLabel.Visible == true)
+                {
+                    EasterEggGame();
+                }
             }
         }
 
@@ -348,17 +374,43 @@ namespace Mech423Lab1
         private void GetOrientation()
         {
             if (accData.x > orientHighThresh) // if x axis large then left roll
+            {
                 orientationTextbox.Text = "Roll left";
+                orientPicBoxPitch.Image = pitchLevel;
+                orientPicBoxRoll.Image = rollLeft;
+            }
             else if (accData.x < orientLowThresh)
+            {
                 orientationTextbox.Text = "Roll right";
+                orientPicBoxPitch.Image = pitchLevel;
+                orientPicBoxRoll.Image = rollRight;
+            }
             else if (accData.y > orientHighThresh)
+            {
                 orientationTextbox.Text = "Pitch up";
+                orientPicBoxPitch.Image = pitchUp;
+                orientPicBoxRoll.Image = rollLevel;
+            }
             else if (accData.y < orientLowThresh)
+            {
                 orientationTextbox.Text = "Pitch down";
+                orientPicBoxPitch.Image = pitchDown;
+                orientPicBoxRoll.Image = rollLevel;
+            }
+
             else if (accData.z > orientHighThresh)
+            {
                 orientationTextbox.Text = "Level";
+                orientPicBoxPitch.Image = pitchLevel;
+                orientPicBoxRoll.Image = rollLevel;
+            }
+
             else if (accData.z < orientLowThresh)
+            {
                 orientationTextbox.Text = "Inverted";
+                orientPicBoxPitch.Image = pitchInverted;
+                orientPicBoxRoll.Image = rollInverted;
+            }
             else
                 orientationTextbox.Text = "";
         }
@@ -384,6 +436,10 @@ namespace Mech423Lab1
                 {
                     gestureState = "+Z";
                 }
+                //else if (accData.z < gestureThreshNeg) // negative threshold
+                //{
+                //    gestureState = "-Z";
+                //}
                 else
                 {
                     gestureState = "";
@@ -402,31 +458,80 @@ namespace Mech423Lab1
             currentAccelTextbox.Text = gestureState;
         }
 
+        private void EasterEggButton_Click(object sender, EventArgs e)
+        {
+            if (gameLabel.Visible)
+            {
+                gameLabel.Visible = false;
+                gameGestureTextbox.Visible = false;
+                gameWonLabel.Visible = false;
+                gameReset.Visible = false;
+            }
+            else
+            {
+                gameLabel.Visible = true;
+                gameGestureTextbox.Visible = true;
+                gameReset.Visible = true;
+            }
+
+        }
+
         private void StoreGesture()
         {
             gestureQueue.Enqueue(gestureState);
             gestureCount = gestureQueue.Count(); // get num gestures in queue 
-            DisplayCombo();
+            DisplayCombo(true);
+        }
+
+        private void GameReset_Click(object sender, EventArgs e)
+        {
+            gameState = false;
+            gameWonLabel.Visible = false;
         }
 
         // Show combination of gesture and show gesture name
-        private void DisplayCombo()
+        private void DisplayCombo(bool playSound)
         {
             string[] gestures = gestureQueue.ToArray();
             string output = string.Join(" ", gestures);
             accelSequenceTextbox.Text = output;
+            gameString = output; // for the game
 
             if (output == "+X")
             {
                 gestureTextbox.Text = "Simple punch";
+                if (playSound)
+                {
+                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\simplePunch.wav");
+                    simpleSound.Play();
+                }
             }
             else if (output == "+Z +X")
             {
                 gestureTextbox.Text = "High punch";
+                if (playSound)
+                {
+                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\highPunch.wav");
+                    simpleSound.Play();
+                }
             }
             else if (output == "+X +Y +Z")
             {
                 gestureTextbox.Text = "Right hook";
+                if (playSound)
+                {
+                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\rightHook.wav");
+                    simpleSound.Play();
+                }
+            }
+            else if (output == "+Y +Z")
+            {
+                gestureTextbox.Text = "Uppercut";
+                if (playSound)
+                {
+                    SoundPlayer simpleSound = new SoundPlayer(@"C:\Users\Safet\source\repos\Mech423Lab1\surprise.wav");
+                    simpleSound.Play();
+                }
             }
             else
             {
@@ -455,6 +560,7 @@ namespace Mech423Lab1
             pitchTextbox.Text = string.Format("{0:0.0}", YPR.pitch);
         }
 
+        // Map to rescale YPR from 0 to 255, to +/- 90 degrees
         public double Map(double value, double fromSource, double toSource, double fromTarget, double toTarget)
         {
             return (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
@@ -465,6 +571,7 @@ namespace Mech423Lab1
             // nothing for now
         }
 
+        // CSV button deployment
         private void SaveToCSVButton_Click(object sender, EventArgs e)
         {
             if (!serialCom.IsOpen)
@@ -487,6 +594,7 @@ namespace Mech423Lab1
             }
         }
 
+        // Write to CSV
         public static void addRecord(int xAcc, int yAcc, int zAcc, string filepath)
         {
             List<string> records = new List<string>() {xAcc.ToString(), yAcc.ToString(), zAcc.ToString(), ""};
@@ -499,6 +607,27 @@ namespace Mech423Lab1
                     csv.NextRecord(); // prepares new data to write (carriage return in CSV)
                 }
             }   
+        }
+
+        // Hidden game
+        public void EasterEggGame()
+        {
+            if (!gameState)
+            {
+                Random rnd = new Random(); // randomize order of strings to win
+                List<string> gestureOptions = new List<string> { "+Z +Z +Z", "+Y +X +Y", "+X +X +Z" };
+                gameGestureTextbox.Text = gestureOptions[rnd.Next(0, 3)];
+                gameState = true; // so that this loop only happens once
+                gameWon = false;
+            }
+
+            // Winning condition; need gameWon condition else empty gameString will match
+            if ((gameString == gameGestureTextbox.Text) && (gameWon == false))
+            {
+                gameWonLabel.Visible = true;
+                gameWon = true;
+                gameGestureTextbox.Text = "";
+            }
         }
     }
 }

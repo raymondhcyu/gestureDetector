@@ -55,7 +55,7 @@
             this.xLabelAvg = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.saveToCSVButton = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.easterEggButton = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.bufferSizeTextbox = new System.Windows.Forms.TextBox();
@@ -68,15 +68,20 @@
             this.orientationTextbox = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.currentAccelTextbox = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.yawTextbox = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.pitchTextbox = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.rollTextbox = new System.Windows.Forms.TextBox();
             this.datalogCheckbox = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.orientPicBoxPitch = new System.Windows.Forms.PictureBox();
+            this.orientPicBoxRoll = new System.Windows.Forms.PictureBox();
+            this.gameLabel = new System.Windows.Forms.Label();
+            this.gameGestureTextbox = new System.Windows.Forms.TextBox();
+            this.gameReset = new System.Windows.Forms.Button();
+            this.gameWonLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.xyzChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orientPicBoxPitch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orientPicBoxRoll)).BeginInit();
             this.SuspendLayout();
             // 
             // serialConnectButton
@@ -137,7 +142,7 @@
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(867, 453);
+            this.exitButton.Location = new System.Drawing.Point(870, 603);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(83, 23);
             this.exitButton.TabIndex = 4;
@@ -267,7 +272,7 @@
             // 
             // saveToCSVButton
             // 
-            this.saveToCSVButton.Location = new System.Drawing.Point(741, 453);
+            this.saveToCSVButton.Location = new System.Drawing.Point(758, 603);
             this.saveToCSVButton.Name = "saveToCSVButton";
             this.saveToCSVButton.Size = new System.Drawing.Size(106, 23);
             this.saveToCSVButton.TabIndex = 21;
@@ -275,19 +280,20 @@
             this.saveToCSVButton.UseVisualStyleBackColor = true;
             this.saveToCSVButton.Click += new System.EventHandler(this.SaveToCSVButton_Click);
             // 
-            // button2
+            // easterEggButton
             // 
-            this.button2.Location = new System.Drawing.Point(620, 453);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(103, 23);
-            this.button2.TabIndex = 22;
-            this.button2.Text = "Easter Egg";
-            this.button2.UseVisualStyleBackColor = true;
+            this.easterEggButton.Location = new System.Drawing.Point(850, 383);
+            this.easterEggButton.Name = "easterEggButton";
+            this.easterEggButton.Size = new System.Drawing.Size(103, 32);
+            this.easterEggButton.TabIndex = 22;
+            this.easterEggButton.Text = "Easter Egg";
+            this.easterEggButton.UseVisualStyleBackColor = true;
+            this.easterEggButton.Click += new System.EventHandler(this.EasterEggButton_Click);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(463, 355);
+            this.label9.Location = new System.Drawing.Point(763, 358);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(81, 17);
             this.label9.TabIndex = 26;
@@ -296,7 +302,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(485, 322);
+            this.label10.Location = new System.Drawing.Point(785, 325);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(56, 17);
             this.label10.TabIndex = 25;
@@ -304,7 +310,7 @@
             // 
             // bufferSizeTextbox
             // 
-            this.bufferSizeTextbox.Location = new System.Drawing.Point(550, 352);
+            this.bufferSizeTextbox.Location = new System.Drawing.Point(850, 355);
             this.bufferSizeTextbox.Name = "bufferSizeTextbox";
             this.bufferSizeTextbox.ReadOnly = true;
             this.bufferSizeTextbox.Size = new System.Drawing.Size(100, 22);
@@ -312,7 +318,7 @@
             // 
             // uptimeTextbox
             // 
-            this.uptimeTextbox.Location = new System.Drawing.Point(550, 322);
+            this.uptimeTextbox.Location = new System.Drawing.Point(850, 325);
             this.uptimeTextbox.Name = "uptimeTextbox";
             this.uptimeTextbox.ReadOnly = true;
             this.uptimeTextbox.Size = new System.Drawing.Size(100, 22);
@@ -321,7 +327,7 @@
             // gestureLabel
             // 
             this.gestureLabel.AutoSize = true;
-            this.gestureLabel.Location = new System.Drawing.Point(719, 383);
+            this.gestureLabel.Location = new System.Drawing.Point(492, 383);
             this.gestureLabel.Name = "gestureLabel";
             this.gestureLabel.Size = new System.Drawing.Size(63, 17);
             this.gestureLabel.TabIndex = 30;
@@ -330,7 +336,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(668, 353);
+            this.label12.Location = new System.Drawing.Point(441, 353);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(114, 17);
             this.label12.TabIndex = 29;
@@ -338,7 +344,7 @@
             // 
             // gestureTextbox
             // 
-            this.gestureTextbox.Location = new System.Drawing.Point(788, 383);
+            this.gestureTextbox.Location = new System.Drawing.Point(561, 383);
             this.gestureTextbox.Name = "gestureTextbox";
             this.gestureTextbox.ReadOnly = true;
             this.gestureTextbox.Size = new System.Drawing.Size(162, 22);
@@ -346,7 +352,7 @@
             // 
             // accelSequenceTextbox
             // 
-            this.accelSequenceTextbox.Location = new System.Drawing.Point(788, 353);
+            this.accelSequenceTextbox.Location = new System.Drawing.Point(561, 353);
             this.accelSequenceTextbox.Name = "accelSequenceTextbox";
             this.accelSequenceTextbox.ReadOnly = true;
             this.accelSequenceTextbox.Size = new System.Drawing.Size(162, 22);
@@ -372,7 +378,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(685, 327);
+            this.label11.Location = new System.Drawing.Point(458, 327);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(97, 17);
             this.label11.TabIndex = 35;
@@ -380,33 +386,16 @@
             // 
             // currentAccelTextbox
             // 
-            this.currentAccelTextbox.Location = new System.Drawing.Point(788, 325);
+            this.currentAccelTextbox.Location = new System.Drawing.Point(561, 325);
             this.currentAccelTextbox.Name = "currentAccelTextbox";
             this.currentAccelTextbox.ReadOnly = true;
             this.currentAccelTextbox.Size = new System.Drawing.Size(162, 22);
             this.currentAccelTextbox.TabIndex = 34;
             // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(12, 355);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(38, 17);
-            this.label13.TabIndex = 37;
-            this.label13.Text = "Yaw:";
-            // 
-            // yawTextbox
-            // 
-            this.yawTextbox.Location = new System.Drawing.Point(108, 355);
-            this.yawTextbox.Name = "yawTextbox";
-            this.yawTextbox.ReadOnly = true;
-            this.yawTextbox.Size = new System.Drawing.Size(100, 22);
-            this.yawTextbox.TabIndex = 36;
-            // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(12, 383);
+            this.label14.Location = new System.Drawing.Point(260, 353);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(43, 17);
             this.label14.TabIndex = 39;
@@ -414,7 +403,7 @@
             // 
             // pitchTextbox
             // 
-            this.pitchTextbox.Location = new System.Drawing.Point(108, 383);
+            this.pitchTextbox.Location = new System.Drawing.Point(317, 355);
             this.pitchTextbox.Name = "pitchTextbox";
             this.pitchTextbox.ReadOnly = true;
             this.pitchTextbox.Size = new System.Drawing.Size(100, 22);
@@ -423,7 +412,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(12, 411);
+            this.label15.Location = new System.Drawing.Point(267, 383);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(36, 17);
             this.label15.TabIndex = 41;
@@ -431,7 +420,7 @@
             // 
             // rollTextbox
             // 
-            this.rollTextbox.Location = new System.Drawing.Point(108, 411);
+            this.rollTextbox.Location = new System.Drawing.Point(317, 383);
             this.rollTextbox.Name = "rollTextbox";
             this.rollTextbox.ReadOnly = true;
             this.rollTextbox.Size = new System.Drawing.Size(100, 22);
@@ -440,7 +429,7 @@
             // datalogCheckbox
             // 
             this.datalogCheckbox.AutoSize = true;
-            this.datalogCheckbox.Location = new System.Drawing.Point(741, 426);
+            this.datalogCheckbox.Location = new System.Drawing.Point(758, 576);
             this.datalogCheckbox.Name = "datalogCheckbox";
             this.datalogCheckbox.Size = new System.Drawing.Size(106, 21);
             this.datalogCheckbox.TabIndex = 42;
@@ -448,26 +437,80 @@
             this.datalogCheckbox.UseVisualStyleBackColor = true;
             this.datalogCheckbox.CheckedChanged += new System.EventHandler(this.DatalogCheckbox_CheckedChanged);
             // 
-            // textBox1
+            // orientPicBoxPitch
             // 
-            this.textBox1.Location = new System.Drawing.Point(364, 382);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
-            this.textBox1.TabIndex = 43;
+            this.orientPicBoxPitch.Location = new System.Drawing.Point(17, 424);
+            this.orientPicBoxPitch.Margin = new System.Windows.Forms.Padding(4);
+            this.orientPicBoxPitch.Name = "orientPicBoxPitch";
+            this.orientPicBoxPitch.Size = new System.Drawing.Size(214, 202);
+            this.orientPicBoxPitch.TabIndex = 43;
+            this.orientPicBoxPitch.TabStop = false;
+            // 
+            // orientPicBoxRoll
+            // 
+            this.orientPicBoxRoll.Location = new System.Drawing.Point(254, 424);
+            this.orientPicBoxRoll.Margin = new System.Windows.Forms.Padding(4);
+            this.orientPicBoxRoll.Name = "orientPicBoxRoll";
+            this.orientPicBoxRoll.Size = new System.Drawing.Size(214, 202);
+            this.orientPicBoxRoll.TabIndex = 44;
+            this.orientPicBoxRoll.TabStop = false;
+            // 
+            // gameLabel
+            // 
+            this.gameLabel.AutoSize = true;
+            this.gameLabel.Location = new System.Drawing.Point(750, 449);
+            this.gameLabel.Name = "gameLabel";
+            this.gameLabel.Size = new System.Drawing.Size(203, 17);
+            this.gameLabel.TabIndex = 45;
+            this.gameLabel.Text = "Try getting the correct gesture!";
+            this.gameLabel.Visible = false;
+            // 
+            // gameGestureTextbox
+            // 
+            this.gameGestureTextbox.Location = new System.Drawing.Point(750, 479);
+            this.gameGestureTextbox.Name = "gameGestureTextbox";
+            this.gameGestureTextbox.ReadOnly = true;
+            this.gameGestureTextbox.Size = new System.Drawing.Size(203, 22);
+            this.gameGestureTextbox.TabIndex = 46;
+            this.gameGestureTextbox.Visible = false;
+            // 
+            // gameReset
+            // 
+            this.gameReset.Location = new System.Drawing.Point(878, 516);
+            this.gameReset.Name = "gameReset";
+            this.gameReset.Size = new System.Drawing.Size(75, 23);
+            this.gameReset.TabIndex = 47;
+            this.gameReset.Text = "Reset";
+            this.gameReset.UseVisualStyleBackColor = true;
+            this.gameReset.Visible = false;
+            this.gameReset.Click += new System.EventHandler(this.GameReset_Click);
+            // 
+            // gameWonLabel
+            // 
+            this.gameWonLabel.AutoSize = true;
+            this.gameWonLabel.Location = new System.Drawing.Point(750, 516);
+            this.gameWonLabel.Name = "gameWonLabel";
+            this.gameWonLabel.Size = new System.Drawing.Size(65, 17);
+            this.gameWonLabel.TabIndex = 48;
+            this.gameWonLabel.Text = "You won!";
+            this.gameWonLabel.Visible = false;
             // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(962, 488);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(962, 644);
+            this.Controls.Add(this.gameWonLabel);
+            this.Controls.Add(this.gameReset);
+            this.Controls.Add(this.gameGestureTextbox);
+            this.Controls.Add(this.gameLabel);
+            this.Controls.Add(this.orientPicBoxRoll);
+            this.Controls.Add(this.orientPicBoxPitch);
             this.Controls.Add(this.datalogCheckbox);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.rollTextbox);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.pitchTextbox);
-            this.Controls.Add(this.label13);
-            this.Controls.Add(this.yawTextbox);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.currentAccelTextbox);
             this.Controls.Add(this.orientationLabel);
@@ -480,7 +523,7 @@
             this.Controls.Add(this.label10);
             this.Controls.Add(this.bufferSizeTextbox);
             this.Controls.Add(this.uptimeTextbox);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.easterEggButton);
             this.Controls.Add(this.saveToCSVButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label6);
@@ -506,6 +549,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.xyzChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orientPicBoxPitch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.orientPicBoxRoll)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -533,7 +578,7 @@
         private System.Windows.Forms.TextBox xLabelAvg;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button saveToCSVButton;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button easterEggButton;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox bufferSizeTextbox;
@@ -546,14 +591,17 @@
         private System.Windows.Forms.TextBox orientationTextbox;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox currentAccelTextbox;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox yawTextbox;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox pitchTextbox;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox rollTextbox;
         private System.Windows.Forms.CheckBox datalogCheckbox;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.PictureBox orientPicBoxPitch;
+        private System.Windows.Forms.PictureBox orientPicBoxRoll;
+        private System.Windows.Forms.Label gameLabel;
+        private System.Windows.Forms.TextBox gameGestureTextbox;
+        private System.Windows.Forms.Button gameReset;
+        private System.Windows.Forms.Label gameWonLabel;
     }
 }
 
